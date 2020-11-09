@@ -27,7 +27,7 @@ class Player(declarative_base()):
 		self.DB = Player.init_connection()
 
 	@staticmethod
-	def init_connection(path: str = "Configuration/connection.json") -> Session:
+	def init_connection(path: str = "Configuration/local.json") -> Session:
 		connection_string = "mysql+pymysql://"
 		with open(path) as json_connection:
 			data = json.load(json_connection)
