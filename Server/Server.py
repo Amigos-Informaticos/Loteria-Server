@@ -2,18 +2,19 @@ import inspect
 import json
 import socket
 import threading
+from json import JSONDecodeError
 
-from Model.Player import Player
+from Server.Controller.PlayerController import PlayerController as Player
 
 
-class Server:
+class Server(Player):
 	def __init__(self, host: str = '', port: int = 42069):
 		self.host = host
 		self.port = port
 		self.threads = []
 		self.methods = []
+		self.connected_clients = []
 		self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.load_methods()
 		print(f"Host set to: {host}")
 		print(f"Port set to: {port}")
 
@@ -45,49 +46,40 @@ class Server:
 				new_thread.start()
 			except KeyboardInterrupt:
 				exit("Interrupted")
+			except Exception as Error:
+				print(Error)
 
 	def serve(self, connection, address):
 		print(f"Connected from: {address}")
-		received = connection.recv(1024)
-		received = json.loads(received.decode("utf-8"))
-		method = received["Method"]
-		args = received["Arguments"]
-		while method != "close":
-			if method in self.methods:
-				response = getattr(self, method)(args)
-				connection.send(response.encode())
+		try:
+			received = connection.recv(1024)
+			received = json.loads(received.decode("utf-8"))
+			method = received["Method"]
+			args = received["Arguments"]
+			while method != "close":
+				if method in self.methods:
+					response = getattr(self, method)(args, {connection, address})
+					connection.send(response.encode())
 
-				received = connection.recv(1024)
-				received = json.loads(received.decode("utf-8"))
-				method = received["Method"]
-				args = received["Arguments"]
-			else:
-				connection.send("Method not supported".encode())
-
-		connection.close()
+					received = connection.recv(1024)
+					received = json.loads(received.decode("utf-8"))
+					method = received["Method"]
+					args = received["Arguments"]
+				else:
+					connection.send("Method not supported".encode())
+			if method == "close":
+				connection.close()
+				if {connection, address} in self.connected_clients:
+					self.connected_clients.remove({connection, address})
+		except JSONDecodeError:
+			print(f"Unexpected disconnection from {address}")
 		print(f"{address} disconnected")
 
-	def save_user(self, player: json) -> str:
+	def ping(self, message: json, _) -> str:
+		return message['message']
+
+	def make_room(self, player: json) -> str:
 		response = str(False)
 		if len(player) == 5:
-			new_player = Player(
-				player["name"],
-				player["last_name"],
-				player["nickname"],
-				player["email"],
-				player["password"]
-			)
-			response = str(new_player.register())
+			pass
 		return response
-
-	def delete_user(self, player: json) -> str:
-		response = str(False)
-		if len(player) == 1:
-			player: Player = Player.get_by_email(player['email'])
-			response = str(player.delete())
-		return response
-
-	def delete(self, key: list) -> str:
-		if key is not None:
-			new_player = Player.get_by_email(key[0])
-			return str(new_player.delete())

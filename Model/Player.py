@@ -5,7 +5,7 @@ from sqlalchemy import Column, String, SmallInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 
-import Model
+from Model import Player
 
 
 class Player(declarative_base()):
@@ -60,11 +60,18 @@ class Player(declarative_base()):
 		return response
 
 	@staticmethod
-	def get_by_email(email: str) -> Model.Player:
+	def get_by_email(email: str) -> Player:
 		if Player.is_registered(email):
 			player = Player.init_connection().query(Player).filter_by(
 				correoElectronico=email).first()
-			return player
+			new_player = Player(
+				player.nombres,
+				player.apellidos,
+				player.nickname,
+				player.correoElectronico,
+				player.contrasena
+			)
+			return new_player
 		return None
 
 	@staticmethod
