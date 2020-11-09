@@ -5,6 +5,7 @@ from sqlalchemy import Column, String, SmallInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 
+from Configuration.Configuration import get_connection_file
 from Model import Player
 
 
@@ -27,8 +28,10 @@ class Player(declarative_base()):
 		self.DB = Player.init_connection()
 
 	@staticmethod
-	def init_connection(path: str = "Configuration/local.json") -> Session:
+	def init_connection(path: str = None) -> Session:
 		connection_string = "mysql+pymysql://"
+		if path is None:
+			path = get_connection_file()
 		with open(path) as json_connection:
 			data = json.load(json_connection)
 			connection_string += data['user'] + ":"
