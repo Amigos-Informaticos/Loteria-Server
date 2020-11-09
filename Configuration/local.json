@@ -1,6 +1,6 @@
 {
-    "host": "localhost",
-    "database": "Loteria",
-    "user": "root",
-    "password": ""
+  "host": "localhost",
+  "database": "Loteria",
+  "user": "amigos_informaticos",
+  "password": "beethoven"
 }

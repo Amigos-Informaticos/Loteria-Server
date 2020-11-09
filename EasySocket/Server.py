@@ -7,7 +7,7 @@ from Model.Player import Player
 
 
 class Server:
-	def __init__(self, host: str = '', port: int = 50000):
+	def __init__(self, host: str = '', port: int = 42069):
 		self.host = host
 		self.port = port
 		self.threads = []
@@ -63,7 +63,7 @@ class Server:
 				args = received["Arguments"]
 			else:
 				connection.send("Method not supported".encode())
-				
+
 		connection.close()
 		print(f"{address} disconnected")
 
@@ -80,7 +80,14 @@ class Server:
 			response = str(new_player.register())
 		return response
 
+	def delete_user(self, player: json) -> str:
+		response = str(False)
+		if len(player) == 1:
+			player: Player = Player.get_by_email(player['email'])
+			response = str(player.delete())
+		return response
+
 	def delete(self, key: list) -> str:
 		if key is not None:
-			new_player = Player.get_by_public_key(key[0])
+			new_player = Player.get_by_email(key[0])
 			return str(new_player.delete())
