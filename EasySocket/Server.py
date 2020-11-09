@@ -7,7 +7,7 @@ from Model.Player import Player
 
 
 class Server:
-	def __init__(self, host: str = '', port: int = 12345):
+	def __init__(self, host: str = '', port: int = 50000):
 		self.host = host
 		self.port = port
 		self.threads = []
