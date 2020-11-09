@@ -43,8 +43,8 @@ class Server:
 				new_thread = threading.Thread(target=self.serve, args=(connection, address))
 				self.threads.append(new_thread)
 				new_thread.start()
-			except KeyboardInterrupt as A:
-				print(A)
+			except KeyboardInterrupt:
+				exit("Interrupted")
 
 	def serve(self, connection, address):
 		print(f"Connected from: {address}")
