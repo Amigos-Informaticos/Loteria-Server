@@ -54,7 +54,6 @@ class Server(Player):
 		try:
 			received = connection.recv(1024)
 			received = received.decode("utf-8")
-			print(received)
 			received = json.loads(received)
 			method = received["Method"]
 			args = received["Arguments"]
