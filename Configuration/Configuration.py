@@ -6,7 +6,9 @@ remote = "Configuration/connection.json"
 
 
 def get_connection_file() -> str:
-	ip = socket.gethostbyname(socket.gethostname()).split(".")[-1]
-	if ip == "99":
-		return local
-	return remote
+	file = remote
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	s.connect(("8.8.8.8", 80))
+	if str(s.getsockname()[0]).split(".")[-1] == "99":
+		file = local
+	return file
