@@ -53,7 +53,9 @@ class Server(Player):
 		print(f"Connected from: {address}")
 		try:
 			received = connection.recv(1024)
-			received = json.loads(received.decode("utf-8"))
+			received = received.decode("utf-8")
+			print(received)
+			received = json.loads(received)
 			method = received["Method"]
 			args = received["Arguments"]
 			while method != "close":
