@@ -1,4 +1,5 @@
 import json
+from json import JSONDecodeError
 from socket import socket
 from time import sleep
 
@@ -109,10 +110,13 @@ class PlayerController:
 	def send_code_to_email(self, values: json, _) -> str:
 		if "email" in values:
 			code: str = PlayerController.get_code_from_email(values["email"])
+			code = code[0:5]
 			mail: Mailer = Mailer()
 			mail.login_from_file()
-			message: str = get_message_from_file("Configuration/messages.json", "new_user")
-			message = message.replace("{}", code)
+			# TODO HERE
+			# message: str = get_message_from_file("Configuration/messages.json", "new_user")
+			# message = message.replace("{}", code)
+			message: str = code
 			mail.send(values["email"], message)
 			return "OK"
 		return "ERROR"

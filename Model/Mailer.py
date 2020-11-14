@@ -36,18 +36,18 @@ class Mailer:
 
 	def send(self, receiver: str, message: str) -> bool:
 		response: bool = False
-		print("\n" + receiver + "\n" + message)
 		server: SMTP = self.prepare()
 		server.login(self.address, self.password)
+		print(message)
 		server.sendmail(
 			self.address,
-			receiver.encode(),
+			receiver,
 			message
 		)
 		return response
 
 	def sent_to_all(self, message: str, delete_recipients_on_send: bool = False) -> None:
-		for receier in self.recipients:
-			self.send(receier, message)
+		for receiver in self.recipients:
+			self.send(receiver, message)
 		if delete_recipients_on_send:
 			self.clear_recipients()
