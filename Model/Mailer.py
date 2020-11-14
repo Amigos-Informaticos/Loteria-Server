@@ -36,6 +36,7 @@ class Mailer:
 
 	def send(self, receiver: str, message: str) -> bool:
 		response: bool = False
+		print("\n" + receiver + "\n" + message)
 		server: SMTP = self.prepare()
 		server.login(self.address, self.password)
 		server.sendmail(self.address, receiver.encode(), message.encode())
