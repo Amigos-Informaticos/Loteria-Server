@@ -2,6 +2,7 @@ import json
 from socket import socket
 from time import sleep
 
+from Model.Mailer import Mailer
 from Model.Player import Player
 from Util.Util import remove_key, get_message_from_file, md5
 
@@ -104,3 +105,12 @@ class PlayerController:
 	@staticmethod
 	def get_code_from_email(email: str) -> str:
 		return md5(email)
+
+	@staticmethod
+	def send_code_to_email(email: str) -> None:
+		code: str = PlayerController.get_code_from_email(email)
+		mail: Mailer = Mailer()
+		mail.login_from_file()
+		message: str = get_message_from_file("Configuration/messages.json", "new_user")
+		message = message.replace("{}", code)
+		mail.send(email, message)
