@@ -1,5 +1,6 @@
 import json
 import ssl
+from email.mime.text import MIMEText
 from smtplib import SMTP
 from ssl import SSLContext
 
@@ -36,9 +37,9 @@ class Mailer:
 
 	def send(self, receiver: str, message: str) -> bool:
 		response: bool = False
+		message = message.encode("utf8")
 		server: SMTP = self.prepare()
 		server.login(self.address, self.password)
-		print(message)
 		server.sendmail(
 			self.address,
 			receiver,
