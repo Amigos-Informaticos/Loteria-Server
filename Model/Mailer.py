@@ -39,7 +39,11 @@ class Mailer:
 		print("\n" + receiver + "\n" + message)
 		server: SMTP = self.prepare()
 		server.login(self.address, self.password)
-		server.sendmail(self.address, receiver.encode(), message.encode())
+		server.sendmail(
+			self.address,
+			receiver.encode(),
+			message.encode()
+		)
 		return response
 
 	def sent_to_all(self, message: str, delete_recipients_on_send: bool = False) -> None:
