@@ -2,5 +2,8 @@
   "host": "201.105.200.72",
   "database": "Loteria",
   "user": "amigos_informaticos",
-  "password": "beethoven"
+  "password": "beethoven",
+  "port": 42069,
+  "address": "",
+  "capacity": 20
 }
