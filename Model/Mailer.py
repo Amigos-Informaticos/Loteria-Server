@@ -42,7 +42,7 @@ class Mailer:
 		server.sendmail(
 			self.address,
 			receiver.encode(),
-			message.encode()
+			message
 		)
 		return response
 
