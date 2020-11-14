@@ -106,7 +106,7 @@ class PlayerController:
 	def get_code_from_email(email: str) -> str:
 		return md5(email)
 
-	def send_code_to_email(self, values: json) -> str:
+	def send_code_to_email(self, values: json, _) -> str:
 		if "email" in values:
 			code: str = PlayerController.get_code_from_email(values["email"])
 			mail: Mailer = Mailer()
