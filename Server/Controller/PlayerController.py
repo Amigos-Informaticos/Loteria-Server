@@ -106,8 +106,7 @@ class PlayerController:
 	def get_code_from_email(email: str) -> str:
 		return md5(email)
 
-	@staticmethod
-	def send_code_to_email(email: str) -> None:
+	def send_code_to_email(self, email: str) -> None:
 		code: str = PlayerController.get_code_from_email(email)
 		mail: Mailer = Mailer()
 		mail.login_from_file()
