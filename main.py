@@ -1,3 +1,4 @@
+from Model.Mailer import Mailer
 from Server.Server import Server
 
 CONFIGURATION: dict = {

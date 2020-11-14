@@ -44,6 +44,7 @@ class Player(declarative_base()):
 		if not Player.is_registered(self.correoElectronico):
 			self.DB.add(self)
 			self.DB.commit()
+			#TODO cambiar response para poner el codigo de usuario
 			return json.dumps({"status": "OK"})
 		return json.dumps({"status": "Already registered"})
 

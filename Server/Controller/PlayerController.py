@@ -3,7 +3,7 @@ from socket import socket
 from time import sleep
 
 from Model.Player import Player
-from Util.Util import remove_key
+from Util.Util import remove_key, get_message_from_file, md5
 
 
 class PlayerController:
@@ -20,6 +20,8 @@ class PlayerController:
 				player["email"],
 				player["password"]
 			)
+			message: str = get_message_from_file("Configuration/messages.json", "new_user")
+			message.replace("{}", PlayerController.get_code_from_email(player["email"]))
 			response = str(new_player.register())
 		return response
 
@@ -98,3 +100,7 @@ class PlayerController:
 			connection: socket = PlayerController.get_connection_by_email(message["receiver"])
 			values: dict = remove_key(message, "receiver")
 			connection.send(str(values).encode())
+
+	@staticmethod
+	def get_code_from_email(email: str) -> str:
+		return md5(email)

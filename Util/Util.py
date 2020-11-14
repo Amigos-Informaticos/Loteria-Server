@@ -1,4 +1,5 @@
 import hashlib
+import json
 from typing import Any
 
 
@@ -18,3 +19,12 @@ def remove_key(dictionary: dict, key: Any) -> dict:
 	new_dictionary: dict = dict(dictionary)
 	del new_dictionary[key]
 	return new_dictionary
+
+
+def get_message_from_file(file_path: str, message_name: str) -> str:
+	response: str or None = None
+	with open(file_path) as file:
+		messages = json.load(file)
+		if message_name in messages:
+			response = messages[message_name]
+	return response
