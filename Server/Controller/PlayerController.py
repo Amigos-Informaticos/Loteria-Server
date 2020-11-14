@@ -115,3 +115,4 @@ class PlayerController:
 			message = message.replace("{}", code)
 			mail.send(values["email"], message)
 			return "OK"
+		return "ERROR"
