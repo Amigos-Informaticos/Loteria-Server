@@ -106,10 +106,11 @@ class PlayerController:
 	def get_code_from_email(email: str) -> str:
 		return md5(email)
 
-	def send_code_to_email(self, email: str) -> None:
-		code: str = PlayerController.get_code_from_email(email)
-		mail: Mailer = Mailer()
-		mail.login_from_file()
-		message: str = get_message_from_file("Configuration/messages.json", "new_user")
-		message = message.replace("{}", code)
-		mail.send(email, message)
+	def send_code_to_email(self, values: json) -> None:
+		if "email" in values:
+			code: str = PlayerController.get_code_from_email(values["email"])
+			mail: Mailer = Mailer()
+			mail.login_from_file()
+			message: str = get_message_from_file("Configuration/messages.json", "new_user")
+			message = message.replace("{}", code)
+			mail.send(values["email"], message)
