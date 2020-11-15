@@ -10,7 +10,7 @@ from Util.Util import remove_key, get_message_from_file, md5
 class PlayerController:
 	connected_clients = []
 
-	def save_user(self, values: json, _) -> str:
+	def sign_up(self, values: json, _) -> str:
 		response: str = "Error"
 		required_values: set = {"name", "lastname", "nickname", "email", "password", "code"}
 		if all(key in values for key in required_values):
