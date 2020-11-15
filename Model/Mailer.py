@@ -38,6 +38,7 @@ class Mailer:
 		response: bool = False
 		server: SMTP = self.prepare()
 		server.login(self.address, self.password)
+		print(message)
 		server.sendmail(
 			self.address,
 			receiver,

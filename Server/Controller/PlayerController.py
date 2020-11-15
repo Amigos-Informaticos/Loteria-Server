@@ -109,9 +109,11 @@ class PlayerController:
 
 	def send_code_to_email(self, values: json, _) -> str:
 		if "email" in values:
-			code: str = PlayerController.get_code_from_email(values["email"])[0:10]
-			message: str = get_message_from_file("Configuration/messages.json", "new_user")
-			message = message.replace("{}", code)
+			code: str = PlayerController.get_code_from_email(values["email"])[0:5]
+			# TODO
+			# message: str = get_message_from_file("Configuration/messages.json", "new_user")
+			# message = message.replace("{}", code)
+			message = code
 			mail: Mailer = Mailer()
 			mail.login_from_file()
 			mail.send(values["email"], message)
