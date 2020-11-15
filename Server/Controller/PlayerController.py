@@ -17,7 +17,7 @@ class PlayerController:
 			if values["code"] == PlayerController.get_code_from_email(values["email"]):
 				new_player: Player = Player(
 					values["name"],
-					values["last_name"],
+					values["lastname"],
 					values["nickname"],
 					values["email"],
 					values["password"]
