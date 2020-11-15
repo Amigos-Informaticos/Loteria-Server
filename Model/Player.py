@@ -52,8 +52,8 @@ class Player(declarative_base()):
 
 	def login(self) -> bool:
 		exists = self.DB.query(
-			self.DB.query(Player).filter_by(correoElectronico=self.correoElectronico,
-			                                contrasena=self.contrasena).exists()
+			self.DB.query(Player).filter_by(
+				correoElectronico=self.correoElectronico, contrasena=self.contrasena).exists()
 		).scalar()
 		return exists
 

@@ -1,6 +1,6 @@
 import json
 import ssl
-from smtplib import SMTP
+from smtplib import SMTP, SMTPResponseException
 from ssl import SSLContext
 
 
@@ -34,16 +34,22 @@ class Mailer:
 	def clear_recipients(self) -> None:
 		self.recipients = []
 
-	def send(self, receiver: str, message: str) -> bool:
-		response: bool = False
-		server: SMTP = self.prepare()
-		server.login(self.address, self.password)
-		print(message)
-		server.sendmail(
-			self.address,
-			receiver,
-			message
-		)
+	def send(self, receiver: str, message: str) -> str:
+		response: str = "UNIDENTIFIED ERROR"
+		try:
+			server: SMTP = self.prepare()
+			server.login(self.address, self.password)
+			print(message)
+			server.sendmail(
+				self.address,
+				receiver,
+				message
+			)
+			response = "OK"
+		except SMTPResponseException as error:
+			error_code = error.smtp_code
+			if error_code == 553 or error_code == 510 or error_code == 511:
+				response = "WRONG EMAIL"
 		return response
 
 	def sent_to_all(self, message: str, delete_recipients_on_send: bool = False) -> None:

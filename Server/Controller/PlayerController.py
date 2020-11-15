@@ -108,6 +108,7 @@ class PlayerController:
 		return md5(email)[0:5]
 
 	def send_code_to_email(self, values: json, _) -> str:
+		response: str = "ERROR"
 		if "email" in values:
 			code: str = PlayerController.get_code_from_email(values["email"])
 			# TODO
@@ -116,6 +117,7 @@ class PlayerController:
 			message = code
 			mail: Mailer = Mailer()
 			mail.login_from_file()
-			mail.send(values["email"], message)
-			return "OK"
-		return "ERROR"
+			response = mail.send(values["email"], message)
+		else:
+			response = "EMAIL NOT SET"
+		return response
