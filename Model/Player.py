@@ -46,6 +46,8 @@ class Player(declarative_base()):
 			self.DB.add(self)
 			self.DB.commit()
 			response = "OK"
+		else:
+			response = "Already registered"
 		return response
 
 	def login(self) -> bool:
