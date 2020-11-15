@@ -105,11 +105,11 @@ class PlayerController:
 
 	@staticmethod
 	def get_code_from_email(email: str) -> str:
-		return md5(email)
+		return md5(email)[0:5]
 
 	def send_code_to_email(self, values: json, _) -> str:
 		if "email" in values:
-			code: str = PlayerController.get_code_from_email(values["email"])[0:10]
+			code: str = PlayerController.get_code_from_email(values["email"])
 			# TODO
 			# message: str = get_message_from_file("Configuration/messages.json", "new_user")
 			# message = message.replace("{}", code)
