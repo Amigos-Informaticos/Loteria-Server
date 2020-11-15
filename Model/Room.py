@@ -36,3 +36,6 @@ class Room:
 				if user.correoElectronico != values["sender"]:
 					values["receiver"] = user.correoElectronico
 					PlayerController.send_message(values)
+
+	def is_empty(self) -> bool:
+		return len(self.users) == 0

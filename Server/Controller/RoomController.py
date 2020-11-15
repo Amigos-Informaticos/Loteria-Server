@@ -10,9 +10,13 @@ class RoomController:
 	def make_room(self, configuration: json, connection_values: dict) -> str:
 		response: str = "Error"
 		if "creator_email" in configuration:
-			email: str = configuration["creator_email"]
-			PlayerController.watch_user(email, connection_values)
-			room: Room = Room(email)
+			watchable_user: dict = {
+				"email": configuration["creator_email"],
+				"connection": connection_values["connection"],
+				"address": connection_values["address"]
+			}
+			PlayerController.watch_user(watchable_user)
+			room: Room = Room(configuration["email"])
 			response = str({"Room_id": room.id})
 		return response
 
@@ -23,6 +27,8 @@ class RoomController:
 			user: str = configuration["user_email"]
 			room: Room = RoomController.get_room_by_id(room_id)
 			room.remove_user(user)
+			if room.is_empty():
+				self.rooms.remove(room)
 		return response
 
 	def send_message(self, values: json, _) -> str:

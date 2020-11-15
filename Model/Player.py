@@ -41,12 +41,12 @@ class Player(declarative_base()):
 		return Session(sqlalchemy.create_engine(connection_string))
 
 	def register(self) -> str:
+		response: str = "ERROR"
 		if not Player.is_registered(self.correoElectronico):
 			self.DB.add(self)
 			self.DB.commit()
-			#TODO cambiar response para poner el codigo de usuario
-			return json.dumps({"status": "OK"})
-		return json.dumps({"status": "Already registered"})
+			response = "OK"
+		return response
 
 	def login(self) -> bool:
 		exists = self.DB.query(

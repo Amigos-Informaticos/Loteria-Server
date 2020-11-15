@@ -1,5 +1,4 @@
 import json
-from json import JSONDecodeError
 from socket import socket
 from time import sleep
 
@@ -11,20 +10,21 @@ from Util.Util import remove_key, get_message_from_file, md5
 class PlayerController:
 	connected_clients = []
 
-	def save_user(self, player: json, _) -> str:
+	def save_user(self, values: json, _) -> str:
 		response: str = "Error"
-		required_values: set = {"name", "lastname", "nickname", "email", "password"}
-		if all(key in player for key in required_values):
-			new_player: Player = Player(
-				player["name"],
-				player["last_name"],
-				player["nickname"],
-				player["email"],
-				player["password"]
-			)
-			message: str = get_message_from_file("Configuration/messages.json", "new_user")
-			message.replace("{}", PlayerController.get_code_from_email(player["email"]))
-			response = str(new_player.register())
+		required_values: set = {"name", "lastname", "nickname", "email", "password", "code"}
+		if all(key in values for key in required_values):
+			if values["code"] == PlayerController.get_code_from_email(values["email"]):
+				new_player: Player = Player(
+					values["name"],
+					values["last_name"],
+					values["nickname"],
+					values["email"],
+					values["password"]
+				)
+				response = str(new_player.register())
+			else:
+				response = "WRONG CODE"
 		return response
 
 	def login(self, player: json, connection_values: dict, _) -> str:
@@ -109,14 +109,11 @@ class PlayerController:
 
 	def send_code_to_email(self, values: json, _) -> str:
 		if "email" in values:
-			code: str = PlayerController.get_code_from_email(values["email"])
-			code = code[0:5]
+			code: str = PlayerController.get_code_from_email(values["email"])[0:10]
+			message: str = get_message_from_file("Configuration/messages.json", "new_user")
+			message = message.replace("{}", code)
 			mail: Mailer = Mailer()
 			mail.login_from_file()
-			# TODO HERE
-			# message: str = get_message_from_file("Configuration/messages.json", "new_user")
-			# message = message.replace("{}", code)
-			message: str = code
 			mail.send(values["email"], message)
 			return "OK"
 		return "ERROR"
