@@ -41,7 +41,7 @@ class Player(declarative_base()):
 		return Session(sqlalchemy.create_engine(connection_string))
 
 	def register(self) -> str:
-		response: str = "ERROR"
+		response: str = "Error"
 		if not Player.is_registered(self.correoElectronico):
 			self.DB.add(self)
 			self.DB.commit()

@@ -27,7 +27,7 @@ class PlayerController:
 				response = "WRONG CODE"
 		return response
 
-	def login(self, player: json, connection_values: dict, _) -> str:
+	def login(self, player: json, connection_values: dict) -> str:
 		response: str = "Error"
 		if 'email' in player and 'password' in player:
 			new_player: Player = Player.get_by_email(player['email'])
