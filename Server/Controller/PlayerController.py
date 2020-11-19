@@ -4,7 +4,7 @@ from time import sleep
 
 from Model.Mailer import Mailer
 from Model.Player import Player
-from Util.Util import remove_key, get_message_from_file, md5
+from Util.Util import remove_key, md5
 
 
 class PlayerController:
@@ -25,6 +25,8 @@ class PlayerController:
 				response = str(new_player.register())
 			else:
 				response = "WRONG CODE"
+		else:
+			response = "WRONG ARGUMENTS"
 		return response
 
 	def login(self, player: json, connection_values: dict) -> str:
@@ -59,7 +61,12 @@ class PlayerController:
 
 	@staticmethod
 	def watch_user(user: dict) -> None:
-		if user not in PlayerController.connected_clients:
+		is_watched: bool = False
+		for connected_user in PlayerController.connected_clients:
+			if connected_user["email"] == user["email"]:
+				is_watched = True
+				break
+		if not is_watched:
 			PlayerController.connected_clients.append(user)
 
 	@staticmethod
@@ -108,7 +115,7 @@ class PlayerController:
 		return md5(email)[0:5]
 
 	def send_code_to_email(self, values: json, _) -> str:
-		response: str = "ERROR"
+		response: str
 		if "email" in values:
 			code: str = PlayerController.get_code_from_email(values["email"])
 			# TODO
@@ -121,3 +128,6 @@ class PlayerController:
 		else:
 			response = "EMAIL NOT SET"
 		return response
+
+	def get_top_ten(self, _) -> str:
+		return Player.get_top_ten()

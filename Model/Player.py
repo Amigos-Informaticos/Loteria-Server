@@ -87,3 +87,10 @@ class Player(declarative_base()):
 			DB.query(Player).filter_by(correoElectronico=email).exists()
 		).scalar()
 		return exists
+
+	@staticmethod
+	def get_top_ten() -> str:
+		response: str = "ERROR"
+		DB = Player.init_connection()
+		DB.query(Player).order_by(Player.puntuacion)
+		return response
