@@ -94,8 +94,9 @@ class Player(declarative_base()):
 		DB = Player.init_connection()
 		counter: int = 0
 		players: dict = {}
-		for player in DB.query(Player.nombres, Player.puntuacion).order_by(
-				Player.puntuacion.asc()).limit(10):
+		results: list = DB.query(Player.nombres, Player.puntuacion).order_by(
+			Player.puntuacion.asc()).limit(10)
+		for player in results:
 			values: dict = {
 				"name": player.nombres,
 				"points": str(player.puntuacion)
