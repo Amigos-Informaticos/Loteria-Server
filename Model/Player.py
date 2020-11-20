@@ -13,11 +13,11 @@ class Player(declarative_base()):
 	__tablename__ = "Jugador"
 
 	correoElectronico = Column(String(128), primary_key=True, nullable=False)
-	nickname = Column(String(32), nullable=False, unique=True)
-	nombres = Column(String(64), nullable=False)
-	apellidos = Column(String(64), nullable=False)
-	contrasena = Column(String(32), nullable=False)
-	puntuacion = Column(SmallInteger(), nullable=False, default=0)
+	nickname: Column = Column(String(32), nullable=False, unique=True)
+	nombres: Column = Column(String(64), nullable=False)
+	apellidos: Column = Column(String(64), nullable=False)
+	contrasena: Column = Column(String(32), nullable=False)
+	puntuacion: Column = Column(SmallInteger(), nullable=False, default=0)
 
 	def __init__(self, name: str, lastname: str, nickname: str, email: str, password: str):
 		self.nombres = name
@@ -92,5 +92,15 @@ class Player(declarative_base()):
 	def get_top_ten() -> str:
 		response: str = "ERROR"
 		DB = Player.init_connection()
-		DB.query(Player).order_by(Player.puntuacion)
+		counter: int = 0
+		players: dict = {}
+		for player in DB.query(Player).order_by(Player.puntuacion.desc()).limit(10):
+			values: dict = {
+				"name": player.nombres,
+				"points": player.puntuacion
+			}
+			players[counter] = values
+			counter = counter + 1
+		if len(players) > 0:
+			response = str(players)
 		return response
