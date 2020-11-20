@@ -97,7 +97,7 @@ class Player(declarative_base()):
 		for player in DB.query(Player).order_by(Player.puntuacion.asc()).limit(10):
 			values: dict = {
 				"name": player.nombres,
-				"points": player.puntuacion
+				"points": str(player.puntuacion)
 			}
 			players[counter] = values
 			counter = counter + 1
