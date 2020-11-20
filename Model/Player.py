@@ -91,7 +91,7 @@ class Player(declarative_base()):
 	@staticmethod
 	def get_top_ten() -> str:
 		response: str = "ERROR"
-		DB = Player.init_connection()
+		DB: Session = Player.init_connection()
 		counter: int = 0
 		players: dict = {}
 		results: list = DB.query(Player.nombres, Player.puntuacion).order_by(

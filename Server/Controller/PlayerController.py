@@ -129,5 +129,5 @@ class PlayerController:
 			response = "EMAIL NOT SET"
 		return response
 
-	def get_top_ten(self, arguments: None, _) -> str:
+	def get_top_ten(self, a, _) -> str:
 		return Player.get_top_ten()
