@@ -104,5 +104,5 @@ class Player(declarative_base()):
 			players[counter] = values
 			counter = counter + 1
 		if len(players) > 0:
-			response = str(players)
+			response = str(json.dumps(players))
 		return response
