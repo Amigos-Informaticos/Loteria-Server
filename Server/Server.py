@@ -27,6 +27,8 @@ class Server(PlayerController):
 		self.logger.add_message(f"Host set to: {self.host}")
 		self.logger.add_message(f"Port set to: {self.port}")
 		self.logger.send()
+		print(f"Host set to: {self.host}")
+		print(f"Port set to: {self.port}")
 
 	def run(self) -> None:
 		self.load_methods()
@@ -56,6 +58,7 @@ class Server(PlayerController):
 	def activate(self):
 		self.tcp_socket.listen(self.capacity)
 		self.logger.send(f"Listening on {self.port} with capacity for {self.capacity}")
+		print(f"Listening on {self.port} with capacity for {self.capacity}")
 
 	def init_cycle(self):
 		while True:
@@ -68,9 +71,11 @@ class Server(PlayerController):
 				exit("Interrupted")
 			except Exception as Error:
 				self.logger.send(str(Error))
+				print(Error)
 
 	def serve(self, connection, address):
 		self.logger.send(f"Connected from: {address[0]}")
+		print(f"Connected from: {address[0]}")
 		try:
 			received = connection.recv(1024)
 			received: json = json.loads(received.decode("utf-8"))
@@ -97,7 +102,11 @@ class Server(PlayerController):
 				connection.close()
 		except JSONDecodeError:
 			self.logger.send(f"Unexpected disconnection from {address}")
+			print(f"Unexpected disconnection from {address}")
 		self.logger.send(f"{address} disconnected")
+		print(f"{address} disconnected")
 
-	def ping(self, message: json, _) -> str:
+	def ping(self, message: json, connection_values: dict) -> str:
+		self.logger.send(f"Pinged from {connection_values['address']}")
+		print(f"Pinged from {connection_values['address']}")
 		return message['message']
