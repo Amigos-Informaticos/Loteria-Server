@@ -98,8 +98,8 @@ class Player(declarative_base()):
 			Player.score.asc()).limit(10)
 		for player in results:
 			values: dict = {
-				"name": player.nombres,
-				"points": str(player.puntuacion)
+				"name": player.name,
+				"points": str(player.score)
 			}
 			players[counter] = values
 			counter = counter + 1
