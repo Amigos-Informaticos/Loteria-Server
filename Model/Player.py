@@ -10,21 +10,21 @@ from Model import Player
 
 
 class Player(declarative_base()):
-	__tablename__ = "Jugador"
+	__tablename__ = "Player"
 
-	correoElectronico = Column(String(128), primary_key=True, nullable=False)
+	email = Column(String(128), primary_key=True, nullable=False)
 	nickname: Column = Column(String(32), nullable=False, unique=True)
-	nombres: Column = Column(String(64), nullable=False)
-	apellidos: Column = Column(String(64), nullable=False)
-	contrasena: Column = Column(String(32), nullable=False)
-	puntuacion: Column = Column(SmallInteger(), nullable=False, default=0)
+	name: Column = Column(String(64), nullable=False)
+	lastname: Column = Column(String(64), nullable=False)
+	password: Column = Column(String(32), nullable=False)
+	score: Column = Column(SmallInteger(), nullable=False, default=0)
 
 	def __init__(self, name: str, lastname: str, nickname: str, email: str, password: str):
-		self.nombres = name
-		self.apellidos = lastname
+		self.name = name
+		self.lastname = lastname
 		self.nickname = nickname
-		self.correoElectronico = email
-		self.contrasena = password
+		self.email = email
+		self.password = password
 		self.DB = Player.init_connection()
 
 	@staticmethod
@@ -42,7 +42,7 @@ class Player(declarative_base()):
 
 	def register(self) -> str:
 		response: str = "Error"
-		if not Player.is_registered(self.correoElectronico):
+		if not Player.is_registered(self.email):
 			self.DB.add(self)
 			self.DB.commit()
 			response = "OK"
@@ -53,12 +53,12 @@ class Player(declarative_base()):
 	def login(self) -> bool:
 		exists = self.DB.query(
 			self.DB.query(Player).filter_by(
-				correoElectronico=self.correoElectronico, contrasena=self.contrasena).exists()
+				email=self.email, password=self.password).exists()
 		).scalar()
 		return exists
 
 	def delete(self) -> bool:
-		if Player.is_registered(self.correoElectronico):
+		if Player.is_registered(self.email):
 			self.DB.delete(self)
 			response = True
 		else:
@@ -69,13 +69,13 @@ class Player(declarative_base()):
 	def get_by_email(email: str) -> Player:
 		if Player.is_registered(email):
 			player = Player.init_connection().query(Player).filter_by(
-				correoElectronico=email).first()
+				email=email).first()
 			new_player = Player(
 				player.nombres,
 				player.apellidos,
 				player.nickname,
-				player.correoElectronico,
-				player.contrasena
+				player.email,
+				player.password
 			)
 			return new_player
 		return None
@@ -84,7 +84,7 @@ class Player(declarative_base()):
 	def is_registered(email: str) -> bool:
 		DB = Player.init_connection()
 		exists = DB.query(
-			DB.query(Player).filter_by(correoElectronico=email).exists()
+			DB.query(Player).filter_by(email=email).exists()
 		).scalar()
 		return exists
 
@@ -94,8 +94,8 @@ class Player(declarative_base()):
 		DB: Session = Player.init_connection()
 		counter: int = 0
 		players: dict = {}
-		results: list = DB.query(Player.nombres, Player.puntuacion).order_by(
-			Player.puntuacion.asc()).limit(10)
+		results: list = DB.query(Player.name, Player.score).order_by(
+			Player.score.asc()).limit(10)
 		for player in results:
 			values: dict = {
 				"name": player.nombres,
