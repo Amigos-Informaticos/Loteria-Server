@@ -105,7 +105,4 @@ class Player(declarative_base()):
 			counter = counter + 1
 		if len(players) > 0:
 			response = str(players)
-		print()
-		print(response)
-		print()
 		return response
