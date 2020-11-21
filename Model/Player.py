@@ -71,8 +71,8 @@ class Player(declarative_base()):
 			player = Player.init_connection().query(Player).filter_by(
 				email=email).first()
 			new_player = Player(
-				player.nombres,
-				player.apellidos,
+				player.name,
+				player.lastname,
 				player.nickname,
 				player.email,
 				player.password
