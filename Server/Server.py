@@ -5,11 +5,13 @@ import threading
 from json import JSONDecodeError
 
 from Server.Controller.PlayerController import PlayerController
+from Util.TelegramBot import TelegramBot
 
 
 class Server(PlayerController):
 	def __init__(self, configuration: dict):
 		super().__init__()
+		self.logger: TelegramBot = TelegramBot("W3Log")
 
 		if all(key in configuration for key in ("host", "port", "capacity")):
 			self.host: str = configuration["host"]
@@ -22,8 +24,9 @@ class Server(PlayerController):
 		self.threads: list = []
 		self.methods: list = []
 		self.tcp_socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		print(f"Host set to: {self.host}")
-		print(f"Port set to: {self.port}")
+		self.logger.add_message(f"Host set to: {self.host}")
+		self.logger.add_message(f"Port set to: {self.port}")
+		self.logger.send()
 
 	def run(self) -> None:
 		self.load_methods()
@@ -52,7 +55,7 @@ class Server(PlayerController):
 
 	def activate(self):
 		self.tcp_socket.listen(self.capacity)
-		print(f"Socket listening on {self.host}:{self.port} with capacity for {self.capacity}")
+		self.logger.send(f"Listening on {self.port} with capacity for {self.capacity}")
 
 	def init_cycle(self):
 		while True:
@@ -64,10 +67,10 @@ class Server(PlayerController):
 			except KeyboardInterrupt:
 				exit("Interrupted")
 			except Exception as Error:
-				print(Error)
+				self.logger.send(str(Error))
 
 	def serve(self, connection, address):
-		print(f"Connected from: {address[0]}")
+		self.logger.send(f"Connected from: {address[0]}")
 		try:
 			received = connection.recv(1024)
 			received: json = json.loads(received.decode("utf-8"))
@@ -93,23 +96,8 @@ class Server(PlayerController):
 			if method == "close":
 				connection.close()
 		except JSONDecodeError:
-			print(f"Unexpected disconnection from {address}")
-		print(f"{address} disconnected")
+			self.logger.send(f"Unexpected disconnection from {address}")
+		self.logger.send(f"{address} disconnected")
 
 	def ping(self, message: json, _) -> str:
 		return message['message']
-
-	# TODO eliminar metodo
-	def after_ping(self, values: dict, connection: dict) -> str:
-		response: str = "Error"
-		if "email" in values:
-			user: dict = {
-				"email": values["email"],
-				"connection": connection["connection"],
-				"address": connection["address"]
-			}
-			PlayerController.watch_user(user)
-			t1 = threading.Thread(target=PlayerController.send, args=values.values())
-			t1.start()
-			response = "OK"
-		return response
