@@ -12,7 +12,7 @@ from Model import Player
 class Player(declarative_base()):
 	__tablename__ = "Player"
 
-	email = Column(String(128), primary_key=True, nullable=False)
+	email: Column = Column(String(128), primary_key=True, nullable=False)
 	nickname: Column = Column(String(32), nullable=False, unique=True)
 	name: Column = Column(String(64), nullable=False)
 	lastname: Column = Column(String(64), nullable=False)
@@ -25,7 +25,7 @@ class Player(declarative_base()):
 		self.nickname = nickname
 		self.email = email
 		self.password = password
-		self.DB = Player.init_connection()
+		self.DB: Session = Player.init_connection()
 
 	@staticmethod
 	def init_connection(path: str = None) -> Session:
@@ -43,9 +43,12 @@ class Player(declarative_base()):
 	def register(self) -> str:
 		response: str = "Error"
 		if not Player.is_registered(self.email):
-			self.DB.add(self)
-			self.DB.commit()
-			response = "OK"
+			if Player.is_registered(self.nickname):
+				self.DB.add(self)
+				self.DB.commit()
+				response = "OK"
+			else:
+				response = "Nickname occupied"
 		else:
 			response = "Already registered"
 		return response
@@ -87,6 +90,14 @@ class Player(declarative_base()):
 			DB.query(Player).filter_by(email=email).exists()
 		).scalar()
 		return exists
+
+	@staticmethod
+	def is_nickname_available(nickname: str) -> bool:
+		DB = Player.init_connection()
+		is_occupied = DB.query(
+			DB.query(Player).filter_by(nickname=nickname).exists()
+		).scalar()
+		return not is_occupied
 
 	@staticmethod
 	def get_top_ten() -> str:
