@@ -74,7 +74,7 @@ class Server(PlayerController):
 				print(Error)
 
 	def serve(self, connection, address):
-		self.logger.send(f"Connected from: {address[0]}")
+		self.logger.add_message(f"Connected from: {address[0]}")
 		print(f"Connected from: {address[0]}")
 		try:
 			received = connection.recv(1024)
@@ -85,7 +85,7 @@ class Server(PlayerController):
 			while method != "close":
 				if method in self.methods:
 					connection_values: dict = {"connection": connection, "address": address}
-					response = getattr(self, method)(arguments, connection_values)
+					response: str = getattr(self, method)(arguments, connection_values)
 
 					connection.send(response.encode())
 					received = connection.recv(1024)
@@ -101,9 +101,12 @@ class Server(PlayerController):
 			if method == "close":
 				connection.close()
 		except JSONDecodeError:
+			connection.close()
 			self.logger.send(f"Unexpected disconnection from {address}")
 			print(f"Unexpected disconnection from {address}")
-		self.logger.send(f"{address} disconnected")
+		connection.close()
+		self.logger.add_message(f"{address} disconnected")
+		self.logger.send()
 		print(f"{address} disconnected")
 
 	def ping(self, message: json, connection_values: dict) -> str:
