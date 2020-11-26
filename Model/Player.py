@@ -41,9 +41,8 @@ class Player(declarative_base()):
 		return Session(sqlalchemy.create_engine(connection_string))
 
 	def register(self) -> str:
-		response: str = "Error"
 		if not Player.is_registered(self.email):
-			if Player.is_registered(self.nickname):
+			if Player.is_nickname_available(self.nickname):
 				self.DB.add(self)
 				self.DB.commit()
 				response = "OK"
