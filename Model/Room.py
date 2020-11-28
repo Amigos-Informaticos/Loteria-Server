@@ -10,7 +10,7 @@ class Room:
 		self.creator: Player = Player.get_by_email(creator_email)
 		self.users = []
 		self.users.append(self.creator)
-		self.id: str = md5(creator_email)
+		self.id: str = md5(creator_email, 2)[0:5]
 
 	def add_user(self, user_email) -> bool:
 		response: bool = False

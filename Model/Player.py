@@ -47,9 +47,9 @@ class Player(declarative_base()):
 				self.DB.commit()
 				response = "OK"
 			else:
-				response = "Nickname occupied"
+				response = "NICKNAME OCCUPIED"
 		else:
-			response = "Already registered"
+			response = "ALREADY REGISTERED"
 		return response
 
 	def login(self) -> bool:
@@ -59,12 +59,12 @@ class Player(declarative_base()):
 		).scalar()
 		return exists
 
-	def delete(self) -> bool:
+	def delete(self) -> str:
 		if Player.is_registered(self.email):
 			self.DB.delete(self)
-			response = True
+			response = "OK"
 		else:
-			response = False
+			response = "ERROR"
 		return response
 
 	@staticmethod

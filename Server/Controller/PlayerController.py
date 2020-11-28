@@ -30,28 +30,33 @@ class PlayerController:
 		return response
 
 	def login(self, player: json, connection_values: dict) -> str:
-		response: str = "Error"
+		response: str = "ERROR"
 		if 'email' in player and 'password' in player:
 			new_player: Player = Player.get_by_email(player['email'])
-			if new_player.login():
-				response = "OK"
-				user: dict = {
-					"email": player["email"],
-					"connection": connection_values["connection"],
-					"address": connection_values["address"]
-				}
-				PlayerController.watch_user(user)
+			if Player.is_registered(player['email']):
+				if new_player.login():
+					response = "OK"
+					user: dict = {
+						"email": player["email"],
+						"connection": connection_values["connection"],
+						"address": connection_values["address"]
+					}
+					PlayerController.watch_user(user)
+				else:
+					response = "WRONG PASSWORD"
+			else:
+				response = "EMAIL NOT REGISTERED"
 		return response
 
 	def logout(self, player: json, _) -> str:
-		response: str = "Error"
+		response: str = "ERROR"
 		if "email" in player:
 			PlayerController.unwatch_user(player["email"])
 			response = "OK"
 		return response
 
 	def delete_user(self, player_email: str, _) -> str:
-		response: str = "Error"
+		response: str = "ERROR"
 		if player_email is not None:
 			player: Player = Player.get_by_email(player_email)
 			if player.delete():
