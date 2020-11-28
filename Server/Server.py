@@ -5,10 +5,11 @@ import threading
 from json import JSONDecodeError
 
 from Server.Controller.PlayerController import PlayerController
+from Server.Controller.RoomController import RoomController
 from Util.TelegramBot import TelegramBot
 
 
-class Server(PlayerController):
+class Server(PlayerController, RoomController):
 	def __init__(self, configuration: dict):
 		super().__init__()
 		self.logger: TelegramBot = TelegramBot("W3Log")
