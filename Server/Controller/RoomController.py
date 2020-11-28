@@ -17,7 +17,7 @@ class RoomController:
 				"address": connection_values["address"]
 			}
 			PlayerController.watch_user(watchable_user)
-			room: Room = Room(configuration["email"])
+			room: Room = Room(configuration["creator_email"])
 			response = room.id
 		return response
 
@@ -50,6 +50,8 @@ class RoomController:
 			player: Player = Player.get_by_email(values["player_email"])
 			if player in room.users:
 				response = room.get_sorted_deck()
+		else:
+			response = "WRONG ARGUMENTS"
 		return response
 
 	@staticmethod

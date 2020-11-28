@@ -8,8 +8,10 @@ from sqlalchemy.orm import Session
 from Configuration.Configuration import get_connection_file
 from Model import Player
 
+Base = declarative_base()
 
-class Player(declarative_base()):
+
+class Player(Base):
 	__tablename__ = "Player"
 
 	email: Column = Column(String(128), primary_key=True, nullable=False)
