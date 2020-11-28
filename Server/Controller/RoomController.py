@@ -1,5 +1,6 @@
 import json
 
+from Model.Player import Player
 from Model.Room import Room
 from Server.Controller.PlayerController import PlayerController
 
@@ -39,6 +40,16 @@ class RoomController:
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			room.send_message(values)
 			response = "OK"
+		return response
+
+	def get_sorted_deck(self, values: json, _) -> str:
+		response: str = "ERROR"
+		required_values: set = {"player_email", "room_id"}
+		if all(key in values for key in required_values):
+			room: Room = RoomController.get_room_by_id(values["room_id"])
+			player: Player = Player.get_by_email(values["player_email"])
+			if player in room.users:
+				response = room.get_sorted_deck()
 		return response
 
 	@staticmethod
