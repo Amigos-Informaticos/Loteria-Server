@@ -1,17 +1,13 @@
 import json
 
-import sqlalchemy
 from sqlalchemy import Column, String, SmallInteger
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 
-from Configuration.Configuration import get_connection_file
 from Model import Player
+from Model.BaseModel import BaseModel
 
-Base = declarative_base()
 
-
-class Player(Base):
+class Player(BaseModel):
 	__tablename__ = "Player"
 
 	email: Column = Column(String(128), primary_key=True, nullable=False)
@@ -29,19 +25,6 @@ class Player(Base):
 		self.password = password
 		self.DB: Session = Player.init_connection()
 
-	@staticmethod
-	def init_connection(path: str = None) -> Session:
-		connection_string = "mysql+pymysql://"
-		if path is None:
-			path = get_connection_file()
-		with open(path) as json_connection:
-			data = json.load(json_connection)
-			connection_string += data['user'] + ":"
-			connection_string += data['password'] + "@"
-			connection_string += data['host'] + '/'
-			connection_string += data['database']
-		return Session(sqlalchemy.create_engine(connection_string))
-
 	def register(self) -> str:
 		if not Player.is_registered(self.email):
 			if Player.is_nickname_available(self.nickname):
@@ -49,9 +32,9 @@ class Player(Base):
 				self.DB.commit()
 				response = "OK"
 			else:
-				response = "NICKNAME OCCUPIED"
+				response: str = "NICKNAME OCCUPIED"
 		else:
-			response = "ALREADY REGISTERED"
+			response: str = "ALREADY REGISTERED"
 		return response
 
 	def login(self) -> bool:
@@ -64,9 +47,10 @@ class Player(Base):
 	def delete(self) -> str:
 		if Player.is_registered(self.email):
 			self.DB.delete(self)
-			response = "OK"
+			self.DB.commit()
+			response: str = "OK"
 		else:
-			response = "ERROR"
+			response: str = "ERROR"
 		return response
 
 	@staticmethod
@@ -86,16 +70,16 @@ class Player(Base):
 
 	@staticmethod
 	def is_registered(email: str) -> bool:
-		DB = Player.init_connection()
-		exists = DB.query(
+		DB: Session = Player.init_connection()
+		exists: bool = DB.query(
 			DB.query(Player).filter_by(email=email).exists()
 		).scalar()
 		return exists
 
 	@staticmethod
 	def is_nickname_available(nickname: str) -> bool:
-		DB = Player.init_connection()
-		is_occupied = DB.query(
+		DB: Session = Player.init_connection()
+		is_occupied: bool = DB.query(
 			DB.query(Player).filter_by(nickname=nickname).exists()
 		).scalar()
 		return not is_occupied
