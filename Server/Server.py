@@ -24,6 +24,7 @@ class Server(PlayerController, RoomController):
 
 		self.threads: list = []
 		self.methods: list = []
+		self.connections: list = []
 		self.tcp_socket: socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.logger.add_message(f"Host set to: {self.host}")
 		self.logger.add_message(f"Port set to: {self.port}")
@@ -67,8 +68,10 @@ class Server(PlayerController, RoomController):
 				connection, address = self.tcp_socket.accept()
 				new_thread = threading.Thread(target=self.serve, args=(connection, address))
 				self.threads.append(new_thread)
+				self.connections.append(connection)
 				new_thread.start()
 			except KeyboardInterrupt:
+				self.close_all()
 				exit("Interrupted")
 			except Exception as Error:
 				self.logger.send(str(Error))
@@ -101,6 +104,7 @@ class Server(PlayerController, RoomController):
 					arguments = received["Arguments"]
 			if method == "close":
 				connection.close()
+				self.connections.remove(connection)
 		except JSONDecodeError:
 			connection.close()
 			self.logger.send(f"Unexpected disconnection from {address}")
@@ -114,3 +118,7 @@ class Server(PlayerController, RoomController):
 		self.logger.send(f"Pinged from {connection_values['address']}")
 		print(f"Pinged from {connection_values['address']}")
 		return message['message']
+
+	def close_all(self):
+		for connection in self.connections:
+			connection.close()
