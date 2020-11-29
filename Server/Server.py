@@ -4,12 +4,11 @@ import socket
 import threading
 from json import JSONDecodeError
 
-from Server.Controller.PlayerController import PlayerController
-from Server.Controller.RoomController import RoomController
+from Server.IServer import IServer
 from Util.TelegramBot import TelegramBot
 
 
-class Server(PlayerController, RoomController):
+class Server(IServer):
 	def __init__(self, configuration: dict):
 		super().__init__()
 		self.logger: TelegramBot = TelegramBot("W3Log")
@@ -57,12 +56,12 @@ class Server(PlayerController, RoomController):
 		if activate:
 			self.activate()
 
-	def activate(self):
+	def activate(self) -> None:
 		self.tcp_socket.listen(self.capacity)
 		self.logger.send(f"Listening on {self.port} with capacity for {self.capacity}")
 		print(f"Listening on {self.port} with capacity for {self.capacity}")
 
-	def init_cycle(self):
+	def init_cycle(self) -> None:
 		while True:
 			try:
 				connection, address = self.tcp_socket.accept()
@@ -77,7 +76,7 @@ class Server(PlayerController, RoomController):
 				self.logger.send(str(Error))
 				print(Error)
 
-	def serve(self, connection, address):
+	def serve(self, connection, address) -> None:
 		self.logger.add_message(f"Connected from: {address[0]}")
 		print(f"Connected from: {address[0]}")
 		try:
