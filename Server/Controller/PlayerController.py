@@ -55,12 +55,12 @@ class PlayerController:
 			response = "OK"
 		return response
 
-	def delete_user(self, player_email: str, _) -> str:
+	def delete_user(self, values: json, _) -> str:
 		response: str = "ERROR"
-		if player_email is not None:
-			player: Player = Player.get_by_email(player_email)
+		if "email" in values:
+			player: Player = Player.get_by_email(values["email"])
 			if player.delete():
-				PlayerController.unwatch_user(player_email)
+				PlayerController.unwatch_user(values["email"])
 				response = "OK"
 		return response
 
