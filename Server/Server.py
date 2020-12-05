@@ -75,6 +75,8 @@ class Server(IServer):
 			except Exception as Error:
 				self.logger.send(str(Error))
 				print(Error)
+		print("Service interrupted. Ending here")
+		self.logger.send("Service interrupted. Ending here")
 
 	def serve(self, connection, address) -> None:
 		self.logger.add_message(f"Connected from: {address[0]}")
