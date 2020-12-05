@@ -1,6 +1,6 @@
 {
   "host": "localhost",
-  "database": "Loteria2",
+  "database": "Loteria",
   "user": "amigos_informaticos",
   "password": "beethoven",
   "port": 42069,

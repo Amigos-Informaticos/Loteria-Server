@@ -1,6 +1,6 @@
 {
-  "host": "201.105.97.102",
-  "database": "Loteria2",
+  "host": "201.105.172.132",
+  "database": "Loteria",
   "user": "amigos_informaticos",
   "password": "beethoven",
   "port": 42069,
