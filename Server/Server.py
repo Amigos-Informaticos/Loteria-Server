@@ -72,6 +72,7 @@ class Server(IServer):
 			except KeyboardInterrupt:
 				self.close_all()
 				exit("Interrupted")
+				break
 			except Exception as Error:
 				self.logger.send(str(Error))
 				print(Error)
