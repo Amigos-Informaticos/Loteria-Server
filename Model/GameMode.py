@@ -13,7 +13,7 @@ class GameMode(BaseModel):
 		SmallInteger(), primary_key=True, nullable=False, autoincrement=True)
 	name: Column = Column(String(32), nullable=False, unique=True)
 	player: Column(String(128), nullable=True)
-	boards = relationship("Board", backpopulates="GameMode")
+	boards = relationship("Board", back_populates="GameMode")
 
 	def __init__(self, name: str, user_email: str):
 		self.name = name
