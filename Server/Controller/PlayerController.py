@@ -78,11 +78,11 @@ class PlayerController:
 					"password": player.password
 				}
 				response = str(json.dumps(player_values))
-				print(response)
 			else:
 				response = "PLAYER NOT FOUND"
 		else:
 			response = "WRONG ARGUMENTS"
+		print(response)
 		return response
 
 	@staticmethod
