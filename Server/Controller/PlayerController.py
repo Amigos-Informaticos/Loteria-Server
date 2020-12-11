@@ -48,7 +48,6 @@ class PlayerController:
 				response = "EMAIL NOT REGISTERED"
 		else:
 			response = "WRONG ARGUMENTS"
-		print(response)
 		return response
 
 	def logout(self, player: json, _) -> str:
@@ -70,7 +69,6 @@ class PlayerController:
 		return response
 
 	def get_user(self, values: json, _) -> str:
-		print("SI")
 		response: str = "ERROR"
 		if "user_email" in values:
 			if Player.is_registered(values["user_email"]):
@@ -88,7 +86,6 @@ class PlayerController:
 				response = "PLAYER NOT FOUND"
 		else:
 			response = "WRONG ARGUMENTS"
-		print(response)
 		return response
 
 	@staticmethod
