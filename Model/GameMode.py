@@ -28,7 +28,7 @@ class GameMode(BaseModel):
 
 	def save(self) -> str:
 		response: str = "ERROR"
-		if not GameMode.is_registered(self.name):
+		if not GameMode.is_registered(self.name, self.player):
 			self.DB.add(self)
 			self.DB.commit()
 			response = "OK"
@@ -38,7 +38,7 @@ class GameMode(BaseModel):
 
 	def delete(self) -> str:
 		response: str = "ERROR"
-		if GameMode.is_registered(self.name):
+		if GameMode.is_registered(self.name, self.player):
 			self.DB.delete(self)
 			self.DB.commit()
 			response = "OK"
@@ -48,7 +48,7 @@ class GameMode(BaseModel):
 
 	def save_pattern(self, pattern: str) -> str:
 		response: str = "ERROR"
-		if not GameMode.is_registered(self.name):
+		if not GameMode.is_registered(self.name, self.player):
 			self.save()
 		if GameMode.is_valid_pattern(pattern):
 			board: Board = Board(self.idGameMode)
@@ -73,14 +73,6 @@ class GameMode(BaseModel):
 		return is_registered
 
 	@staticmethod
-	def get_by_name(name: str) -> GameMode or None:
-		game_mode: GameMode or None = None
-		DB: Session = GameMode.init_connection()
-		if GameMode.is_registered(name):
-			game_mode = DB.query(GameMode).filter_by(name=name).first()
-		return game_mode
-
-	@staticmethod
 	def get_by_user(user_email: str) -> list or None:
 		modes: list or None = None
 		DB: Session = GameMode.init_connection()
@@ -91,7 +83,7 @@ class GameMode(BaseModel):
 	def get_by_name_and_user(name: str, user_email: str) -> GameMode or None:
 		game_mode: GameMode or None = None
 		DB: Session = GameMode.init_connection()
-		if GameMode.is_registered(name):
+		if GameMode.is_registered(name, user_email):
 			game_mode = DB.query(GameMode).filter_by(name=name, player=user_email).first()
 		return game_mode
 
