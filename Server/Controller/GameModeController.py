@@ -13,6 +13,7 @@ class GameModeController:
 				values["user_email"]
 			)
 			response = game_mode.save_pattern(values["pattern"])
+			response = "OK"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
