@@ -44,7 +44,7 @@ class GameModeController:
 	def get_game_modes_by_user(self, values: json, _) -> str:
 		response: str = "ERROR"
 		if "user_email" in values:
-
+			pass
 		else:
-			respones = "WRONG ARGUMENTS"
+			response = "WRONG ARGUMENTS"
 		return response
