@@ -93,7 +93,7 @@ class PlayerController:
 			if Player.is_registered(values["user_email"]):
 				if RoomController.get_room_by_id(values["room_id"]) is not None:
 					room: Room = RoomController.get_room_by_id(values["room_id"])
-					room.
+					#room.
 				else:
 					response = "WRONG ID"
 			else:
