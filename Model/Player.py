@@ -23,6 +23,7 @@ class Player(BaseModel):
 		self.nickname = nickname
 		self.email = email
 		self.password = password
+		self.score = 0
 		self.DB: Session = Player.init_connection()
 
 	def register(self) -> str:
