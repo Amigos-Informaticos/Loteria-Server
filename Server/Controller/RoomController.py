@@ -24,8 +24,8 @@ class RoomController:
 
 	def enter_room(self, configuration: json, connection_values: dict) -> str:
 		response: str = "ERROR"
-		required_values: set = {"room_id", "user_email"}
-		if all(key in configuration for key in required_values):
+		arguments: set = {"room_id", "user_email"}
+		if all(key in configuration for key in arguments):
 			watchable_user: dict = {
 				"email": configuration["user_email"],
 				"connection": connection_values["connection"],
@@ -57,8 +57,8 @@ class RoomController:
 
 	def send_message(self, values: json, _) -> str:
 		response: str = "ERROR"
-		required_values: set = {"message", "sender", "room_id"}
-		if all(key in values for key in required_values):
+		arguments: set = {"message", "sender", "room_id"}
+		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			room.send_message(values)
 			response = "OK"
@@ -66,8 +66,8 @@ class RoomController:
 
 	def get_sorted_deck(self, values: json, _) -> str:
 		response: str = "ERROR"
-		required_values: set = {"player_email", "room_id"}
-		if all(key in values for key in required_values):
+		arguments: set = {"player_email", "room_id"}
+		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			player: Player = Player.get_by_email(values["player_email"])
 			if player in room.users:
@@ -78,8 +78,8 @@ class RoomController:
 
 	def set_user_ready(self, values: json, _) -> str:
 		response: str = "ERROR"
-		required_values: set = {"room_id", "user_email"}
-		if all(key in values for key in required_values):
+		arguments: set = {"room_id", "user_email"}
+		if all(key in values for key in arguments):
 			if Player.is_registered(values["user_email"]):
 				if RoomController.get_room_by_id(values["room_id"]) is not None:
 					room: Room = RoomController.get_room_by_id(values["room_id"])

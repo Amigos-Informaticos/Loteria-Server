@@ -31,8 +31,8 @@ class Room:
 		return response
 
 	def send_message(self, values: json) -> None:
-		required_values: set = {"sender", "message"}
-		if all(key in values for key in required_values):
+		arguments: set = {"sender", "message"}
+		if all(key in values for key in arguments):
 			values["room_id"] = self.id
 			for user in self.users:
 				if user.correoElectronico != values["sender"]:

@@ -12,8 +12,8 @@ class PlayerController:
 
 	def sign_up(self, values: json, _) -> str:
 		response: str = "Error"
-		required_values: set = {"name", "lastname", "nickname", "email", "password", "code"}
-		if all(key in values for key in required_values):
+		arguments: set = {"name", "lastname", "nickname", "email", "password", "code"}
+		if all(key in values for key in arguments):
 			if values["code"] == PlayerController.get_code_from_email(values["email"]):
 				new_player: Player = Player(
 					values["name"],
@@ -133,8 +133,8 @@ class PlayerController:
 
 	@staticmethod
 	def send_message(message: dict) -> None:
-		required_values: set = {"room_id", "sender", "message", "receiver"}
-		if all(key in message for key in required_values):
+		arguments: set = {"room_id", "sender", "message", "receiver"}
+		if all(key in message for key in arguments):
 			connection: socket = PlayerController.get_connection_by_email(message["receiver"])
 			values: dict = remove_key(message, "receiver")
 			connection.send(str(values).encode())

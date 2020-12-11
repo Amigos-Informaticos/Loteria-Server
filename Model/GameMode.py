@@ -42,11 +42,20 @@ class GameMode(BaseModel):
 
 	def save_pattern(self, pattern: str) -> str:
 		response: str = "ERROR"
+		if not GameMode.is_registered(self.name):
+			self.save()
 		if GameMode.is_valid_pattern(pattern):
-			response = Board(self.idGameMode, pattern).save_pattern()
+			board: Board = Board(self.idGameMode)
+			board.pattern = pattern
+			response = board.save_pattern()
 		else:
 			response = "WRONG FORMAT"
 		return response
+
+	def get_boards(self) -> list or None:
+		boards: list or None = None
+		boards = Board.get_by_game_mode(self.idGameMode)
+		return boards
 
 	@staticmethod
 	def is_registered(name: str):
@@ -63,6 +72,13 @@ class GameMode(BaseModel):
 		if GameMode.is_registered(name):
 			game_mode = DB.query(GameMode).filter_by(name=name).first()
 		return game_mode
+
+	@staticmethod
+	def get_by_user(user_email: str) -> list or None:
+		modes: list or None = None
+		DB: Session = GameMode.init_connection()
+		modes = DB.query(GameMode).filter_by(player=user_email)
+		return modes
 
 	@staticmethod
 	def is_valid_pattern(pattern: str) -> bool:

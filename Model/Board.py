@@ -13,8 +13,7 @@ class Board(BaseModel):
 	pattern: Column = Column(String(25), nullable=False)
 	game_mode = relationship("GameMode", back_populates="Board")
 
-	def __init__(self, id_game_mode: int, pattern: str):
-		self.pattern = pattern
+	def __init__(self, id_game_mode: int):
 		self.idGameMode = id_game_mode
 		self.DB: Session = Board.init_connection()
 
@@ -25,6 +24,13 @@ class Board(BaseModel):
 			self.DB.commit()
 			response = "OK"
 		return response
+
+	@staticmethod
+	def get_by_game_mode(id_game_mode: str) -> list or None:
+		boards: list or None = None
+		DB: Session = Board.init_connection()
+		boards = DB.query(Board).filter_by(idGameMode=id_game_mode)
+		return boards
 
 	@staticmethod
 	def get_by_pattern(pattern: str) -> Board or None:
