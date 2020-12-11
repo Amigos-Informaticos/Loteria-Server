@@ -11,7 +11,7 @@ class Board(BaseModel):
 	idGameMode: Column = Column(SmallInteger(), ForeignKey("GameMode.idGameMode"))
 	idBoard: Column = Column(SmallInteger(), nullable=False, primary_key=True, autoincrement=True)
 	pattern: Column = Column(String(25), nullable=False)
-	game_mode = relationship("Board", back_populates="GameMode")
+	game_mode = relationship("GameMode", backpopulates="Board")
 
 	def __init__(self, id_game_mode: int):
 		self.idGameMode = id_game_mode
