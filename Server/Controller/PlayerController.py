@@ -67,6 +67,7 @@ class PlayerController:
 		return response
 
 	def get_user(self, values: json, _) -> str:
+		print("SI")
 		response: str = "ERROR"
 		if "user_email" in values:
 			if Player.is_registered(values["user_email"]):
