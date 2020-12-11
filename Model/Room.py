@@ -1,18 +1,26 @@
 import json
 import random
 
+from Model.GameMode import GameMode
 from Model.Player import Player
 from Server.Controller.PlayerController import PlayerController
 from Util.Util import md5
 
 
 class Room:
-	def __init__(self, creator_email: str):
+	def __init__(self, creator_email: str, limit: int, speed: int, rounds: int, game_mode: str):
 		self.creator: Player = Player.get_by_email(creator_email)
 		self.users: list = []
+		self.users_limit = limit
+		self.deck: list = []
+		self.speed = speed
+		self.rounds = rounds
+		self.set_game_mode(game_mode, self.creator.email)
 		self.users.append(self.creator)
 		self.id: str = md5(creator_email, 2)[0:5]
-		self.deck: list = []
+
+	def set_game_mode(self, game_mode_name: str, user_email: str) -> None:
+		self.game_mode: GameMode = GameMode.get_by_name_and_user(game_mode_name, user_email)
 
 	def add_user(self, user_email) -> bool:
 		response: bool = False

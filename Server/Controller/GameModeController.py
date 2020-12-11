@@ -21,8 +21,8 @@ class GameModeController:
 		response: str = "ERROR"
 		arguments: set = {"game_mode_name", "user_email"}
 		if all(key in values for key in arguments):
-			if GameMode.is_registered(values["game_mode_name"]):
-				game_mode: GameMode = GameMode.get_by_name(values["game_mode_name"])
+			if GameMode.is_registered(values["game_mode_name"], values["user_email"]):
+				game_mode: GameMode = GameMode.get_by_user(values["user_email"])
 				boards: list or None = game_mode.get_boards()
 				if boards is not None:
 					patterns: dict = {}

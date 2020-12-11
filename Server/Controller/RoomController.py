@@ -10,7 +10,8 @@ class RoomController:
 
 	def make_room(self, configuration: json, connection_values: dict) -> str:
 		response: str = "ERROR"
-		if "creator_email" in configuration:
+		arguments: set = {"creator_email", "rounds", "speed", "players", "game_mode"}
+		if all(key in arguments for key in configuration):
 			watchable_user: dict = {
 				"email": configuration["creator_email"],
 				"connection": connection_values["connection"],
@@ -18,8 +19,22 @@ class RoomController:
 				"is_ready": False
 			}
 			PlayerController.watch_user(watchable_user)
-			room: Room = Room(configuration["creator_email"])
+			room: Room = Room(
+				configuration["creator_email"],
+				int(configuration["players"]),
+				int(configuration["speed"]),
+				int(configuration["rounds"]),
+				configuration["game_mode"]
+			)
+			room.users_limit = int(configuration["players"])
 			response = room.id
+			print(configuration["creator_email"])
+			print(configuration["players"])
+			print(configuration["speed"])
+			print(configuration["rounds"])
+			print(configuration["game_mode"])
+		else:
+			response = "WRONG ARGUMENTS"
 		return response
 
 	def enter_room(self, configuration: json, connection_values: dict) -> str:
@@ -83,7 +98,7 @@ class RoomController:
 			if Player.is_registered(values["user_email"]):
 				if RoomController.get_room_by_id(values["room_id"]) is not None:
 					room: Room = RoomController.get_room_by_id(values["room_id"])
-				#room.
+				# room.
 				else:
 					response = "WRONG ID"
 			else:

@@ -1,9 +1,9 @@
 from sqlalchemy import Column, SmallInteger, String
 from sqlalchemy.orm import relationship, Session
 
-from Model import GameMode
 from Model.BaseModel import BaseModel
 from Model.Board import Board
+from Model.GameMode import GameMode
 
 
 class GameMode(BaseModel):
@@ -75,8 +75,9 @@ class GameMode(BaseModel):
 	@staticmethod
 	def get_by_user(user_email: str) -> list or None:
 		modes: list or None = None
-		DB: Session = GameMode.init_connection()
-		modes = DB.query(GameMode).filter_by(player=user_email)
+		if GameMode.count_by_user(user_email) > 0:
+			DB: Session = GameMode.init_connection()
+			modes = DB.query(GameMode).filter_by(player=user_email)
 		return modes
 
 	@staticmethod
@@ -96,3 +97,10 @@ class GameMode(BaseModel):
 					break
 			response = True
 		return response
+
+	@staticmethod
+	def count_by_user(user_email: str) -> int:
+		count: int = 0
+		DB: Session = GameMode.init_connection()
+		count = DB.query(GameMode.idGameMode).filter_by(player=user_email).count()
+		return count
