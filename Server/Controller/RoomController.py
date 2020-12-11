@@ -28,11 +28,6 @@ class RoomController:
 			)
 			room.users_limit = int(configuration["players"])
 			response = room.id
-			print(configuration["creator_email"])
-			print(configuration["players"])
-			print(configuration["speed"])
-			print(configuration["rounds"])
-			print(configuration["game_mode"])
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
@@ -48,12 +43,18 @@ class RoomController:
 				"is_ready": False
 			}
 			PlayerController.watch_user(watchable_user)
-			if RoomController.get_room_by_id(configuration["room_id"]) is None:
-				response = "WRONG ID"
-			else:
+			if RoomController.get_room_by_id(configuration["room_id"]) is not None:
 				room: Room = RoomController.get_room_by_id(configuration["room_id"])
 				room.add_user(configuration["user_email"])
-				response = "OK"
+				response: dict = {
+					"speed": str(room.speed),
+					"rounds": str(room.rounds),
+					"game_mode": room.game_mode.name,
+					"game_mode_id": room.game_mode.idGameMode
+				}
+				response = str(json.dumps(response))
+			else:
+				response = "WRONG ID"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
