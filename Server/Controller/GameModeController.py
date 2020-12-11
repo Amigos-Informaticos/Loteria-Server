@@ -8,17 +8,7 @@ class GameModeController:
 		response: str = "ERROR"
 		arguments: set = {"game_mode_name", "pattern", "user_email"}
 		if all(key in values for key in arguments):
-			game_mode: GameMode = GameMode.get_by_name_and_user(
-				values["game_mode_name"],
-				values["user_email"]
-			)
-			if game_mode is None:
-				game_mode = GameMode(
-					values["game_mode_name"],
-					values["user_email"]
-				)
-				game_mode.save()
-			game_mode: GameMode = GameMode.get_by_name_and_user(
+			game_mode: GameMode = GameMode(
 				values["game_mode_name"],
 				values["user_email"]
 			)

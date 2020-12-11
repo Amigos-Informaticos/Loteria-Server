@@ -19,6 +19,12 @@ class GameMode(BaseModel):
 		self.name = name
 		self.player = user_email
 		self.DB: Session = GameMode.init_connection()
+		if GameMode.is_registered(self.name, self.player):
+			auxiliar_game_mode: GameMode = self.DB.query(GameMode).filter_by(
+				name=self.name,
+				player=self.player).first()
+			self.idGameMode = auxiliar_game_mode.idGameMode
+			del auxiliar_game_mode
 
 	def save(self) -> str:
 		response: str = "ERROR"
@@ -59,10 +65,10 @@ class GameMode(BaseModel):
 		return boards
 
 	@staticmethod
-	def is_registered(name: str):
+	def is_registered(name: str, user_email: str) -> bool:
 		DB: Session = GameMode.init_connection()
 		is_registered: bool = DB.query(
-			DB.query(GameMode).filter_by(name=name).exists()
+			DB.query(GameMode).filter_by(name=name, player=user_email).exists()
 		).scalar()
 		return is_registered
 
