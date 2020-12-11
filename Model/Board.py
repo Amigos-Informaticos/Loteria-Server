@@ -19,10 +19,9 @@ class Board(BaseModel):
 
 	def save_pattern(self) -> str:
 		response: str = "ERROR"
-		if not Board.is_registered(self.pattern):
-			self.DB.add(self)
-			self.DB.commit()
-			response = "OK"
+		self.DB.add(self)
+		self.DB.commit()
+		response = "OK"
 		return response
 
 	@staticmethod
