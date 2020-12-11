@@ -1,5 +1,3 @@
-import abc
-
 import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
@@ -9,7 +7,9 @@ from Configuration.Configuration import get_connection_path
 Base = declarative_base()
 
 
-class BaseModel(abc.ABCMeta, Base):
+class BaseModel(Base):
+	__abstract__ = True
+
 	@staticmethod
 	def init_connection() -> Session:
 		connection_string: str = get_connection_path()
