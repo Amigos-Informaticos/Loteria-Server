@@ -85,9 +85,14 @@ class RoomController:
 		arguments: set = {"player_email", "room_id"}
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
-			player: Player = Player.get_by_email(values["player_email"])
-			if player in room.users:
-				response = room.get_sorted_deck()
+			if room is not None:
+				player: Player = Player.get_by_email(values["player_email"])
+				if player in room.users:
+					response = room.get_sorted_deck()
+				else:
+					response = "USER NOT IN ROOM"
+			else:
+				response = "WRONG ID"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
