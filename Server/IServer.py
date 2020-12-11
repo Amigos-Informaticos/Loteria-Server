@@ -4,7 +4,9 @@ from Server.Controller.PlayerController import PlayerController
 from Server.Controller.RoomController import RoomController
 
 
-class IServer(abc.ABCMeta, PlayerController, RoomController):
+class IServer(PlayerController, RoomController):
+	__abstract__ = True
+
 	def __init__(self):
 		super().__init__()
 
