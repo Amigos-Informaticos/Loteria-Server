@@ -33,9 +33,12 @@ class RoomController:
 				"is_ready": False
 			}
 			PlayerController.watch_user(watchable_user)
-			room: Room = RoomController.get_room_by_id(configuration["room_id"])
-			room.add_user(configuration["user_email"])
-			response = "OK"
+			if RoomController.get_room_by_id(configuration["room_id"]) is None:
+				response = "WRONG ID"
+			else:
+				room: Room = RoomController.get_room_by_id(configuration["room_id"])
+				room.add_user(configuration["user_email"])
+				response = "OK"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
@@ -72,6 +75,7 @@ class RoomController:
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
+
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
