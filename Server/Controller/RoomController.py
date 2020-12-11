@@ -76,6 +76,21 @@ class RoomController:
 			response = "WRONG ARGUMENTS"
 		return response
 
+	def set_user_ready(self, values: json, _) -> str:
+		response: str = "ERROR"
+		required_values: set = {"room_id", "user_email"}
+		if all(key in values for key in required_values):
+			if Player.is_registered(values["user_email"]):
+				if RoomController.get_room_by_id(values["room_id"]) is not None:
+					room: Room = RoomController.get_room_by_id(values["room_id"])
+				#room.
+				else:
+					response = "WRONG ID"
+			else:
+				response = "PLAYER NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
