@@ -1,9 +1,9 @@
 from sqlalchemy import Column, SmallInteger, String
 from sqlalchemy.orm import relationship, Session
 
+from Model import GameMode
 from Model.BaseModel import BaseModel
 from Model.Board import Board
-from Model.GameMode import GameMode
 
 
 class GameMode(BaseModel):
