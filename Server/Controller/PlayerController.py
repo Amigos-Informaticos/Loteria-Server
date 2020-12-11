@@ -29,15 +29,15 @@ class PlayerController:
 			response = "WRONG ARGUMENTS"
 		return response
 
-	def login(self, player: json, connection_values: dict) -> str:
+	def login(self, values: json, connection_values: dict) -> str:
 		response: str = "ERROR"
-		if 'email' in player and 'password' in player:
-			new_player: Player = Player.get_by_email(player['email'])
-			if Player.is_registered(player['email']):
+		if "email" in values and 'password' in values:
+			new_player: Player = Player.get_by_email(values['email'])
+			if Player.is_registered(values['email']):
 				if new_player.login():
 					response = "OK"
 					user: dict = {
-						"email": player["email"],
+						"email": values["email"],
 						"connection": connection_values["connection"],
 						"address": connection_values["address"]
 					}
@@ -46,6 +46,9 @@ class PlayerController:
 					response = "WRONG PASSWORD"
 			else:
 				response = "EMAIL NOT REGISTERED"
+		else:
+			response = "WRONG ARGUMENTS"
+		print(response)
 		return response
 
 	def logout(self, player: json, _) -> str:
