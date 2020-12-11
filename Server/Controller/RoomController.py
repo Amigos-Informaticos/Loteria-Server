@@ -6,7 +6,7 @@ from Server.Controller.PlayerController import PlayerController
 
 
 class RoomController:
-	rooms = []
+	rooms: list = []
 
 	def make_room(self, configuration: json, connection_values: dict) -> str:
 		response: str = "ERROR"
@@ -118,6 +118,7 @@ class RoomController:
 		response_room: Room or None = None
 		for room in RoomController.rooms:
 			if room.id == id:
+				print(room.id)
 				response_room = room
 				break
 		return response_room
