@@ -71,9 +71,9 @@ class Server(IServer):
 				new_thread.start()
 			except KeyboardInterrupt:
 				self.close_all()
-				exit("Interrupted")
 				print("Service interrupted. Ending here")
 				self.logger.send("Service interrupted. Ending here")
+				exit("Interrupted")
 				break
 			except Exception as Error:
 				self.logger.send(str(Error))
