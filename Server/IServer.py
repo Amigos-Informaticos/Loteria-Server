@@ -1,10 +1,11 @@
 import abc
 
+from Server.Controller.GameModeController import GameModeController
 from Server.Controller.PlayerController import PlayerController
 from Server.Controller.RoomController import RoomController
 
 
-class IServer(PlayerController, RoomController):
+class IServer(PlayerController, RoomController, GameModeController):
 	def __init__(self):
 		super().__init__()
 

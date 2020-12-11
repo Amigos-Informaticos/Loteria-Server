@@ -12,28 +12,32 @@ class GameMode(BaseModel):
 	idGameMode: Column = Column(
 		SmallInteger(), primary_key=True, nullable=False, autoincrement=True)
 	name: Column = Column(String(32), nullable=False, unique=True)
+	player: Column(String(128), nullable=True)
 	boards = relationship("Board")
 
-	def __init__(self, name: str):
+	def __init__(self, name: str, user_email: str):
 		self.name = name
+		self.player = user_email
 		self.DB: Session = GameMode.init_connection()
 
 	def save(self) -> str:
+		response: str = "ERROR"
 		if not GameMode.is_registered(self.name):
 			self.DB.add(self)
 			self.DB.commit()
-			response: str = "OK"
+			response = "OK"
 		else:
-			response: str = "NAME OCCUPIED"
+			response = "NAME OCCUPIED"
 		return response
 
 	def delete(self) -> str:
+		response: str = "ERROR"
 		if GameMode.is_registered(self.name):
 			self.DB.delete(self)
 			self.DB.commit()
-			response: str = "OK"
+			response = "OK"
 		else:
-			response: str = "GAME MODE NOT REGISTERED"
+			response = "GAME MODE NOT REGISTERED"
 		return response
 
 	def save_pattern(self, pattern: str) -> str:
