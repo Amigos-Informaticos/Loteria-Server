@@ -62,6 +62,26 @@ class PlayerController:
 			if player.delete():
 				PlayerController.unwatch_user(values["email"])
 				response = "OK"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
+	def get_user(self, values: json, _) -> str:
+		response: str = "ERROR"
+		if "email" in values:
+			if Player.is_registered(values["user_email"]):
+				player: Player = Player.get_by_email(values["email"])
+				player_values: dict = {
+					"name": player.name,
+					"lastname": player.lastname,
+					"email": player.email,
+					"password": player.password
+				}
+				response = str(json.dumps(player_values))
+			else:
+				response = "PLAYER NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
 		return response
 
 	@staticmethod

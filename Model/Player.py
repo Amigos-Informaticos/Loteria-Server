@@ -55,18 +55,11 @@ class Player(BaseModel):
 
 	@staticmethod
 	def get_by_email(email: str) -> Player or None:
-		new_player: Player or None = None
+		player: Player or None = None
 		if Player.is_registered(email):
 			player = Player.init_connection().query(Player).filter_by(
 				email=email).first()
-			new_player = Player(
-				player.name,
-				player.lastname,
-				player.nickname,
-				player.email,
-				player.password
-			)
-		return new_player
+		return player
 
 	@staticmethod
 	def is_registered(email: str) -> bool:

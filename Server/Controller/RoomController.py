@@ -36,6 +36,8 @@ class RoomController:
 			room: Room = RoomController.get_room_by_id(configuration["room_id"])
 			room.add_user(configuration["user_email"])
 			response = "OK"
+		else:
+			response = "WRONG ARGUMENTS"
 		return response
 
 	def exit_room(self, configuration: json, _) -> str:
