@@ -76,7 +76,8 @@ class PlayerController:
 					"lastname": player.lastname,
 					"email": player.email,
 					"password": player.password,
-					"nickname": player.nickname
+					"nickname": player.nickname,
+					"score": player.score
 				}
 				response = str(json.dumps(player_values))
 			else:
