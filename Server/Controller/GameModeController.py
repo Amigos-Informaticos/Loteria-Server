@@ -18,6 +18,10 @@ class GameModeController:
 					values["user_email"]
 				)
 				game_mode.save()
+			game_mode: GameMode = GameMode.get_by_name_and_user(
+				values["game_mode_name"],
+				values["user_email"]
+			)
 			response = game_mode.save_pattern(values["pattern"])
 		else:
 			response = "WRONG ARGUMENTS"
