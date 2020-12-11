@@ -12,11 +12,13 @@ class GameModeController:
 				values["game_mode_name"],
 				values["user_email"]
 			)
-			if game_mode is not None:
-				response = game_mode.save_pattern(values["pattern"])
-				response = "OK"
-			else:
-				response = "GAME NOT REGISTERED"
+			if game_mode is None:
+				game_mode = GameMode(
+					values["game_mode_name"],
+					values["user_email"]
+				)
+				game_mode.save()
+			response = game_mode.save_pattern(values["pattern"])
 		else:
 			response = "WRONG ARGUMENTS"
 		return response

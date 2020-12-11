@@ -48,6 +48,7 @@ class GameMode(BaseModel):
 			board: Board = Board(self.idGameMode)
 			board.pattern = pattern
 			response = board.save_pattern()
+			response = "OK"
 		else:
 			response = "WRONG FORMAT"
 		return response
