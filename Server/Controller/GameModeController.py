@@ -8,12 +8,15 @@ class GameModeController:
 		response: str = "ERROR"
 		arguments: set = {"game_mode_name", "pattern", "user_email"}
 		if all(key in values for key in arguments):
-			game_mode: GameMode = GameMode(
+			game_mode: GameMode = GameMode.get_by_name_and_user(
 				values["game_mode_name"],
 				values["user_email"]
 			)
-			response = game_mode.save_pattern(values["pattern"])
-			response = "OK"
+			if game_mode is not None:
+				response = game_mode.save_pattern(values["pattern"])
+				response = "OK"
+			else:
+				response = "GAME NOT REGISTERED"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response

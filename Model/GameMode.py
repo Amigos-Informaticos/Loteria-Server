@@ -81,6 +81,14 @@ class GameMode(BaseModel):
 		return modes
 
 	@staticmethod
+	def get_by_name_and_user(name: str, user_email: str) -> GameMode or None:
+		game_mode: GameMode or None = None
+		DB: Session = GameMode.init_connection()
+		if GameMode.is_registered(name):
+			game_mode = DB.query(GameMode).filter_by(name=name, player=user_email).first()
+		return game_mode
+
+	@staticmethod
 	def is_valid_pattern(pattern: str) -> bool:
 		response: bool = False
 		if len(pattern) == 25:
