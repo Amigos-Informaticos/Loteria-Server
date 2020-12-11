@@ -14,11 +14,28 @@ class RoomController:
 			watchable_user: dict = {
 				"email": configuration["creator_email"],
 				"connection": connection_values["connection"],
-				"address": connection_values["address"]
+				"address": connection_values["address"],
+				"is_ready": False
 			}
 			PlayerController.watch_user(watchable_user)
 			room: Room = Room(configuration["creator_email"])
 			response = room.id
+		return response
+
+	def enter_room(self, configuration: json, connection_values: dict) -> str:
+		response: str = "ERROR"
+		required_values: set = {"room_id", "user_email"}
+		if all(key in configuration for key in required_values):
+			watchable_user: dict = {
+				"email": configuration["user_email"],
+				"connection": connection_values["connection"],
+				"address": connection_values["address"],
+				"is_ready": False
+			}
+			PlayerController.watch_user(watchable_user)
+			room: Room = RoomController.get_room_by_id(configuration["room_id"])
+			room.add_user(configuration["user_email"])
+			response = "OK"
 		return response
 
 	def exit_room(self, configuration: json, _) -> str:

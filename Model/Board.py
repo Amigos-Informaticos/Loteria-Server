@@ -1,6 +1,7 @@
 from sqlalchemy import Column, SmallInteger, ForeignKey, String
 from sqlalchemy.orm import relationship, Session
 
+from Model import Board
 from Model.BaseModel import BaseModel
 
 
@@ -12,12 +13,8 @@ class Board(BaseModel):
 	pattern: Column = Column(String(25), nullable=False)
 	game_mode = relationship("GameMode", back_populates="Board")
 
-	def __init__(self, pattern: list, id_game_mode: int):
-		pattern_string: str = ""
-		for row in pattern:
-			for mark in row:
-				pattern_string = pattern_string + mark
-		self.pattern = pattern_string
+	def __init__(self, id_game_mode: int, pattern: str):
+		self.pattern = pattern
 		self.idGameMode = id_game_mode
 		self.DB: Session = Board.init_connection()
 
@@ -26,7 +23,16 @@ class Board(BaseModel):
 		if not Board.is_registered(self.pattern):
 			self.DB.add(self)
 			self.DB.commit()
+			response = "OK"
 		return response
+
+	@staticmethod
+	def get_by_pattern(pattern: str) -> Board or None:
+		board: Board or None = None
+		DB: Session = Board.init_connection()
+		if Board.is_registered(pattern):
+			board = DB.query(Board).filter_by(pattern=pattern).first()
+		return board
 
 	@staticmethod
 	def is_registered(pattern: str):

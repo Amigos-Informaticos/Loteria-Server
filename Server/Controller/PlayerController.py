@@ -65,14 +65,14 @@ class PlayerController:
 		return response
 
 	@staticmethod
-	def watch_user(user: dict) -> None:
+	def watch_user(watchable_user: dict) -> None:
 		is_watched: bool = False
 		for connected_user in PlayerController.connected_clients:
-			if connected_user["email"] == user["email"]:
+			if connected_user["email"] == watchable_user["email"]:
 				is_watched = True
 				break
 		if not is_watched:
-			PlayerController.connected_clients.append(user)
+			PlayerController.connected_clients.append(watchable_user)
 
 	@staticmethod
 	def unwatch_user(email: str) -> None:

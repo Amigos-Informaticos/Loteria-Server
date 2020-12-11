@@ -9,7 +9,7 @@ from Util.Util import md5
 class Room:
 	def __init__(self, creator_email: str):
 		self.creator: Player = Player.get_by_email(creator_email)
-		self.users = []
+		self.users: list = []
 		self.users.append(self.creator)
 		self.id: str = md5(creator_email, 2)[0:5]
 		self.deck: list = []
