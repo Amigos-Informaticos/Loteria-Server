@@ -26,7 +26,7 @@ class GameModeController:
 				boards: list or None = game_mode.get_boards()
 				if boards is not None:
 					patterns: dict = {}
-					counter = 0
+					counter: int = 0
 					for board in boards:
 						patterns[counter] = {
 							"pattern": board.pattern
@@ -44,7 +44,26 @@ class GameModeController:
 	def get_game_modes_by_user(self, values: json, _) -> str:
 		response: str = "ERROR"
 		if "user_email" in values:
-			pass
+			game_modes: list or None = GameMode.get_by_user(values["user_email"])
+			if game_modes is not None:
+				response: dict = {}
+				counter: int = 0
+				for game_mode in game_modes:
+					patterns: dict = {}
+					pattern_counter = 0
+					for board in game_mode.get_boards():
+						patterns[pattern_counter] = {
+							str(pattern_counter): board.pattern
+						}
+						pattern_counter += 1
+					response[counter] = {
+						"name": game_mode.name,
+						"patterns": patterns
+					}
+					counter += 1
+				response = str(json.dumps(response))
+			else:
+				response = "NO GAME MODE REGISTERED"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
