@@ -7,7 +7,6 @@ CONFIGURATION: dict = {
 
 if __name__ == "__main__":
 	server = Server(CONFIGURATION)
-	server.run()
 	response = RoomController.make_room(
 		server,
 		{
@@ -23,3 +22,4 @@ if __name__ == "__main__":
 		}
 	)
 	print(response)
+	server.run()
