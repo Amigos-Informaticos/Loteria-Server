@@ -33,17 +33,20 @@ class RoomController:
 		if all(key in configuration for key in arguments):
 			if RoomController.get_room_by_id(configuration["room_id"]) is not None:
 				room: Room = RoomController.get_room_by_id(configuration["room_id"])
-				room.add_user(configuration["user_email"])
-				response: dict = {
-					"speed": str(room.speed),
-					"rounds": str(room.rounds),
-					"game_mode": room.game_mode.name,
-					"game_mode_id": room.game_mode.idGameMode,
-					"available_spaces:": str(room.users_limit - len(room.users))
-				}
-				response = str(json.dumps(response))
-				message: str = self.get_users_in_room(room.id, None)
-				self.notify_joining_room(room, message)
+				if len(room.users) < room.users_limit:
+					room.add_user(configuration["user_email"])
+					response: dict = {
+						"speed": str(room.speed),
+						"rounds": str(room.rounds),
+						"game_mode": room.game_mode.name,
+						"game_mode_id": room.game_mode.idGameMode,
+						"available_spaces:": str(room.users_limit - len(room.users))
+					}
+					response = str(json.dumps(response))
+					message: str = self.get_users_in_room(room.id, None)
+					self.notify_joining_room(room, message)
+				else:
+					response = "ROOM FULL"
 			else:
 				response = "WRONG ID"
 		else:
