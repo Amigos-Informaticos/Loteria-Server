@@ -131,9 +131,15 @@ class RoomController:
 			response: dict = {}
 			counter: int = 0
 			for player in room.users:
+				is_ready: str
+				if player.is_ready:
+					is_ready = "T"
+				else:
+					is_ready = "F"
 				response[counter] = {
 					"nickname": player.nickname,
-					"email": player.email
+					"email": player.email,
+					"is_ready": is_ready
 				}
 				counter += 1
 			response = str(json.dumps(response))
