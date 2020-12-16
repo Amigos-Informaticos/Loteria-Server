@@ -106,11 +106,37 @@ class RoomController:
 			if Player.is_registered(values["user_email"]):
 				if RoomController.get_room_by_id(values["room_id"]) is not None:
 					room: Room = RoomController.get_room_by_id(values["room_id"])
-				# room.
+					player_found: bool = False
+					for player in room.users:
+						if player.email == values["user_email"]:
+							player.is_ready = True
+							player_found = True
+							break
+					if player_found:
+						response = "OK"
+					else:
+						response = "PLAYER NOT IN ROOM"
 				else:
 					response = "WRONG ID"
 			else:
-				response = "PLAYER NOT FOUND"
+				response = "PLAYER NOT REGISTERED"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
+	def get_users_in_room(self, values: json, _) -> str:
+		response: str = "ERROR"
+		if "room_id" in values:
+			room: Room = RoomController.get_room_by_id(values["room_id"])
+			response: dict = {}
+			counter: int = 0
+			for player in room.users:
+				response[counter] = {
+					"nickname": player.nickname,
+					"email": player.email
+				}
+				counter += 1
+			response = str(json.dumps(response))
 		else:
 			response = "WRONG ARGUMENTS"
 		return response

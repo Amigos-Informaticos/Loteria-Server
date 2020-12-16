@@ -24,6 +24,7 @@ class Player(BaseModel):
 		self.email = email
 		self.password = password
 		self.score = 0
+		self.is_ready = False
 		self.DB: Session = Player.init_connection()
 
 	def register(self) -> str:
