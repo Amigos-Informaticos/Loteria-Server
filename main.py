@@ -1,3 +1,4 @@
+from Server.Controller.RoomController import RoomController
 from Server.Server import Server
 
 CONFIGURATION: dict = {
@@ -7,3 +8,18 @@ CONFIGURATION: dict = {
 if __name__ == "__main__":
 	server = Server(CONFIGURATION)
 	server.run()
+	response = RoomController.make_room(
+		server,
+		{
+			"creator_email": "alexisao@hotmail.com",
+			"rounds": "1",
+			"speed": "1",
+			"players": "3",
+			"game_mode": "Hardcore mode"
+		},
+		{
+			"connection": "connection",
+			"address": "address"
+		}
+	)
+	print(response)
