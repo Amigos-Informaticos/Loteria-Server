@@ -51,7 +51,8 @@ class RoomController:
 					"speed": str(room.speed),
 					"rounds": str(room.rounds),
 					"game_mode": room.game_mode.name,
-					"game_mode_id": room.game_mode.idGameMode
+					"game_mode_id": room.game_mode.idGameMode,
+					"available_spaces:": str(room.users_limit - len(room.users))
 				}
 				response = str(json.dumps(response))
 			else:
