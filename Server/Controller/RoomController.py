@@ -27,6 +27,7 @@ class RoomController:
 				configuration["game_mode"]
 			)
 			room.users_limit = int(configuration["players"])
+			RoomController.rooms.append(room)
 			response = room.id
 		else:
 			response = "WRONG ARGUMENTS"
