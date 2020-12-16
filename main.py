@@ -21,5 +21,6 @@ if __name__ == "__main__":
 			"address": "address"
 		}
 	)
-	print(response)
+	for room in RoomController.rooms:
+		print(room.id)
 	server.run()
