@@ -1,4 +1,5 @@
 import json
+from socket import socket
 
 from Model.Player import Player
 from Model.Room import Room
@@ -12,13 +13,6 @@ class RoomController:
 		response: str = "ERROR"
 		arguments: set = {"creator_email", "rounds", "speed", "players", "game_mode"}
 		if all(key in arguments for key in configuration):
-			watchable_user: dict = {
-				"email": configuration["creator_email"],
-				"connection": connection_values["connection"],
-				"address": connection_values["address"],
-				"is_ready": False
-			}
-			PlayerController.watch_user(watchable_user)
 			room: Room = Room(
 				configuration["creator_email"],
 				int(configuration["players"]),
@@ -37,13 +31,6 @@ class RoomController:
 		response: str = "ERROR"
 		arguments: set = {"room_id", "user_email"}
 		if all(key in configuration for key in arguments):
-			watchable_user: dict = {
-				"email": configuration["user_email"],
-				"connection": connection_values["connection"],
-				"address": connection_values["address"],
-				"is_ready": False
-			}
-			PlayerController.watch_user(watchable_user)
 			if RoomController.get_room_by_id(configuration["room_id"]) is not None:
 				room: Room = RoomController.get_room_by_id(configuration["room_id"])
 				room.add_user(configuration["user_email"])
@@ -55,6 +42,8 @@ class RoomController:
 					"available_spaces:": str(room.users_limit - len(room.users))
 				}
 				response = str(json.dumps(response))
+				message: str = self.get_users_in_room(room.id, None)
+				self.notify_joining_room(room, message)
 			else:
 				response = "WRONG ID"
 		else:
@@ -131,11 +120,7 @@ class RoomController:
 			response: dict = {}
 			counter: int = 0
 			for player in room.users:
-				is_ready: str
-				if player.is_ready:
-					is_ready = "T"
-				else:
-					is_ready = "F"
+				is_ready: str = "T" if player.is_ready else "F"
 				response[counter] = {
 					"nickname": player.nickname,
 					"email": player.email,
@@ -146,6 +131,16 @@ class RoomController:
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
+
+	def notify_joining_room(self, room: Room, message: str) -> None:
+		connections: list = []
+		for player in room.users:
+			for subscribed_user in PlayerController.connected_clients:
+				if player.email == subscribed_user["email"]:
+					connections.append(subscribed_user["connection"])
+					break
+		for connection in connections:
+			socket(connection).send(message.encode())
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:

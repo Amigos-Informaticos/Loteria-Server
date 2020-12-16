@@ -29,19 +29,13 @@ class PlayerController:
 			response = "WRONG ARGUMENTS"
 		return response
 
-	def login(self, values: json, connection_values: dict) -> str:
+	def login(self, values: json, _) -> str:
 		response: str = "ERROR"
 		if "email" in values and 'password' in values:
 			new_player: Player = Player.get_by_email(values['email'])
 			if Player.is_registered(values['email']):
 				if new_player.login():
 					response = "OK"
-					user: dict = {
-						"email": values["email"],
-						"connection": connection_values["connection"],
-						"address": connection_values["address"]
-					}
-					PlayerController.watch_user(user)
 				else:
 					response = "WRONG PASSWORD"
 			else:
@@ -84,6 +78,21 @@ class PlayerController:
 				response = str(json.dumps(player_values))
 			else:
 				response = "PLAYER NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
+	def notify_on_join_room(self, values: json, connection: dict) -> str:
+		response: str = "ERROR"
+		arguments: set = {"user_email", "room_id"}
+		if all(key in values for key in arguments):
+			watchable_user: dict = {
+				"email": values["user_email"],
+				"connection": connection["connection"],
+				"address": connection["address"]
+			}
+			PlayerController.watch_user(watchable_user)
+			response = "OK"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
@@ -147,16 +156,21 @@ class PlayerController:
 		response: str
 		if "email" in values:
 			code: str = PlayerController.get_code_from_email(values["email"])
-			# TODO
-			# message: str = get_message_from_file("Configuration/messages.json", "new_user")
-			# message = message.replace("{}", code)
-			message = code
 			mail: Mailer = Mailer()
 			mail.login_from_file()
-			response = mail.send(values["email"], message)
+			response = mail.send(values["email"], code)
 		else:
 			response = "EMAIL NOT SET"
 		return response
 
 	def get_top_ten(self, a, _) -> str:
 		return Player.get_top_ten()
+
+	def unwatch_by_connection(self, connection: socket) -> bool:
+		response: bool = False
+		for connected_user in PlayerController.connected_clients:
+			if connected_user["connection"] == connection:
+				PlayerController.connected_clients.remove(connected_user)
+				response = True
+				break
+		return response
