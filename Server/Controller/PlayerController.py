@@ -97,6 +97,29 @@ class PlayerController:
 			response = "WRONG ARGUMENTS"
 		return response
 
+	def send_code_to_email(self, values: json, _) -> str:
+		response: str
+		if "email" in values:
+			code: str = PlayerController.get_code_from_email(values["email"])
+			mail: Mailer = Mailer()
+			mail.login_from_file()
+			response = mail.send(values["email"], code)
+		else:
+			response = "EMAIL NOT SET"
+		return response
+
+	def get_top_ten(self, a, _) -> str:
+		return Player.get_top_ten()
+
+	def unwatch_by_connection(self, connection: socket) -> bool:
+		response: bool = False
+		for connected_user in PlayerController.connected_clients:
+			if connected_user["connection"] == connection:
+				PlayerController.connected_clients.remove(connected_user)
+				response = True
+				break
+		return response
+
 	@staticmethod
 	def watch_user(watchable_user: dict) -> None:
 		is_watched: bool = False
@@ -151,26 +174,3 @@ class PlayerController:
 	@staticmethod
 	def get_code_from_email(email: str) -> str:
 		return md5(email)[0:5]
-
-	def send_code_to_email(self, values: json, _) -> str:
-		response: str
-		if "email" in values:
-			code: str = PlayerController.get_code_from_email(values["email"])
-			mail: Mailer = Mailer()
-			mail.login_from_file()
-			response = mail.send(values["email"], code)
-		else:
-			response = "EMAIL NOT SET"
-		return response
-
-	def get_top_ten(self, a, _) -> str:
-		return Player.get_top_ten()
-
-	def unwatch_by_connection(self, connection: socket) -> bool:
-		response: bool = False
-		for connected_user in PlayerController.connected_clients:
-			if connected_user["connection"] == connection:
-				PlayerController.connected_clients.remove(connected_user)
-				response = True
-				break
-		return response

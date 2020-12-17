@@ -20,11 +20,11 @@ class GameMode(BaseModel):
 		self.player = user_email
 		self.DB: Session = GameMode.init_connection()
 		if GameMode.is_registered(self.name, self.player):
-			auxiliar_game_mode: GameMode = self.DB.query(GameMode).filter_by(
+			auxiliary_game_mode: GameMode = self.DB.query(GameMode).filter_by(
 				name=self.name,
 				player=self.player).first()
-			self.idGameMode = auxiliar_game_mode.idGameMode
-			del auxiliar_game_mode
+			self.idGameMode = auxiliary_game_mode.idGameMode
+			del auxiliary_game_mode
 
 	def save(self) -> str:
 		response: str = "ERROR"

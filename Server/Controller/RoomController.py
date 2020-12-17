@@ -27,24 +27,26 @@ class RoomController:
 			response = "WRONG ARGUMENTS"
 		return response
 
-	def enter_room(self, configuration: json, connection_values: dict) -> str:
+	def enter_room(self, configuration: json, _) -> str:
 		response: str = "ERROR"
 		arguments: set = {"room_id", "user_email"}
 		if all(key in configuration for key in arguments):
 			if RoomController.get_room_by_id(configuration["room_id"]) is not None:
 				room: Room = RoomController.get_room_by_id(configuration["room_id"])
 				if len(room.users) < room.users_limit:
-					room.add_user(configuration["user_email"])
-					response: dict = {
-						"speed": str(room.speed),
-						"rounds": str(room.rounds),
-						"game_mode": room.game_mode.name,
-						"game_mode_id": room.game_mode.idGameMode,
-						"available_spaces:": str(room.users_limit - len(room.users))
-					}
-					response = str(json.dumps(response))
-					message: str = self.get_users_in_room(room.id, None)
-					self.notify_joining_room(room, message)
+					if room.add_user(configuration["user_email"]):
+						response: dict = {
+							"speed": str(room.speed),
+							"rounds": str(room.rounds),
+							"game_mode": room.game_mode.name,
+							"game_mode_id": room.game_mode.idGameMode,
+							"available_spaces:": str(room.users_limit - len(room.users))
+						}
+						response = str(json.dumps(response))
+						message: str = self.get_users_in_room(room.id, None)
+						self.notify_joining_room(room, message)
+					else:
+						response = "ALREADY JOINED"
 				else:
 					response = "ROOM FULL"
 			else:
