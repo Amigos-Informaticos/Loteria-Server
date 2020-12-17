@@ -13,7 +13,7 @@ if __name__ == "__main__":
 			"creator_email": "alexisao@hotmail.com",
 			"rounds": "1",
 			"speed": "1",
-			"players": "3",
+			"players": "4",
 			"game_mode": "Hardcore mode"
 		},
 		{

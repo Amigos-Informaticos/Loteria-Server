@@ -1,5 +1,4 @@
 import json
-from socket import socket
 
 from Model.Player import Player
 from Model.Room import Room
@@ -148,7 +147,8 @@ class RoomController:
 					connections.append(subscribed_user["connection"])
 					break
 		for connection in connections:
-			socket(connection).send(message.encode())
+			connection.send(message.encode())
+			print(message)
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
