@@ -140,15 +140,13 @@ class RoomController:
 		return response
 
 	def notify_joining_room(self, room: Room, message: str) -> None:
-		connections: list = []
+		print(message)
 		for player in room.users:
 			for subscribed_user in PlayerController.connected_clients:
 				if player.email == subscribed_user["email"]:
-					connections.append(subscribed_user["connection"])
+					subscribed_user["connection"].send(message.encode())
+					print(message)
 					break
-		for connection in connections:
-			connection.send(message.encode())
-			print(message)
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
