@@ -9,20 +9,23 @@ from Server.Controller.PlayerController import PlayerController
 class RoomController:
 	rooms: list = []
 
-	def make_room(self, configuration: json, connection_values: dict) -> str:
+	def make_room(self, values: json, _) -> str:
 		response: str = "ERROR"
 		arguments: set = {"creator_email", "rounds", "speed", "players", "game_mode"}
-		if all(key in arguments for key in configuration):
-			room: Room = Room(
-				configuration["creator_email"],
-				int(configuration["players"]),
-				int(configuration["speed"]),
-				int(configuration["rounds"]),
-				configuration["game_mode"]
-			)
-			room.users_limit = int(configuration["players"])
-			RoomController.rooms.append(room)
-			response = room.id
+		if all(key in arguments for key in values):
+			if not RoomController.exists_by_creator(values["creator_email"]):
+				room: Room = Room(
+					values["creator_email"],
+					int(values["players"]),
+					int(values["speed"]),
+					int(values["rounds"]),
+					values["game_mode"]
+				)
+				room.users_limit = int(values["players"])
+				RoomController.rooms.append(room)
+				response = room.id
+			else:
+				response = "ROOM ALREADY EXISTS"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
@@ -156,3 +159,12 @@ class RoomController:
 				response_room = room
 				break
 		return response_room
+
+	@staticmethod
+	def exists_by_creator(user_email: str) -> bool:
+		exists: bool = False
+		for room in RoomController.rooms:
+			if room.creator.email == user_email:
+				exists = True
+				break
+		return exists
