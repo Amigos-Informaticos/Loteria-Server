@@ -129,6 +129,9 @@ class PlayerController:
 				break
 		if not is_watched:
 			PlayerController.connected_clients.append(watchable_user)
+			print(watchable_user["email"] + " subscribed")
+		else:
+			print(watchable_user["email"] + " already subscribed")
 
 	@staticmethod
 	def unwatch_user(email: str) -> None:
