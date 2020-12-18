@@ -46,7 +46,7 @@ class RoomController:
 						}
 						response = str(json.dumps(response))
 						message: str = self.get_users_in_room(
-							json.dumps({"room_id": room.id}),
+							json.dumps({"room_id": str(room.id)}),
 							None)
 						self.notify_joining_room(room, message)
 					else:
