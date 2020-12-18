@@ -128,7 +128,7 @@ class RoomController:
 			counter: int = 0
 			for player in room.users:
 				is_ready: str = "T" if player.is_ready else "F"
-				response[counter] = {
+				response[str(counter)] = {
 					"nickname": player.nickname,
 					"email": player.email,
 					"is_ready": is_ready
