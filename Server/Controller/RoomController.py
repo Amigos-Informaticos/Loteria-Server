@@ -142,7 +142,9 @@ class RoomController:
 	def notify_joining_room(self, room: Room, message: str) -> None:
 		print(message)
 		for player in room.users:
+			print("A\t" + player.email)
 			for subscribed_user in PlayerController.connected_clients:
+				print("B\t" + subscribed_user["email"])
 				if player.email == subscribed_user["email"]:
 					subscribed_user["connection"].send(message.encode())
 					print(message)
