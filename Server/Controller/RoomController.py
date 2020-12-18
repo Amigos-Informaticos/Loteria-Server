@@ -45,9 +45,7 @@ class RoomController:
 							"available_spaces:": str(room.users_limit - len(room.users))
 						}
 						response = str(json.dumps(response))
-						message: str = self.get_users_in_room(
-							json.dumps({"room_id": str(room.id)}),
-							None)
+						message: str = self.get_users_in_room(configuration, None)
 						self.notify_joining_room(room, message)
 					else:
 						response = "ALREADY JOINED"
