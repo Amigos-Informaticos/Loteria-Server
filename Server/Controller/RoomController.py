@@ -68,6 +68,8 @@ class RoomController:
 				if room.is_empty():
 					self.rooms.remove(room)
 					response = "OK"
+			else:
+				response = "ROOM NOT FOUND"
 		return response
 
 	def send_message(self, values: json, _) -> str:
