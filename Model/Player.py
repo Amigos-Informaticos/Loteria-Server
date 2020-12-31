@@ -96,7 +96,7 @@ class Player(BaseModel):
 			Player.score.asc()).limit(10)
 		for player in results:
 			values: dict = {
-				"name": player.name,
+				"name": player.nickname,
 				"points": str(player.score)
 			}
 			players[counter] = values
