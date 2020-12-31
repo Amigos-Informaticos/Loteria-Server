@@ -63,10 +63,11 @@ class RoomController:
 			room_id: str = configuration["room_id"]
 			user: str = configuration["user_email"]
 			room: Room = RoomController.get_room_by_id(room_id)
-			room.remove_user(user)
-			if room.is_empty():
-				self.rooms.remove(room)
-				response = "OK"
+			if room is not None:
+				room.remove_user(user)
+				if room.is_empty():
+					self.rooms.remove(room)
+					response = "OK"
 		return response
 
 	def send_message(self, values: json, _) -> str:
