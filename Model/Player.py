@@ -92,7 +92,7 @@ class Player(BaseModel):
 		DB: Session = Player.init_connection()
 		counter: int = 0
 		players: dict = {}
-		results: list = DB.query(Player.name, Player.score).order_by(
+		results: list = DB.query(Player.nickname, Player.score).order_by(
 			Player.score.asc()).limit(10)
 		for player in results:
 			values: dict = {
