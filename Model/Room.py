@@ -23,12 +23,17 @@ class Room:
 		self.game_mode: GameMode = GameMode.get_by_name_and_user(game_mode_name, user_email)
 
 	def add_user(self, user_email) -> bool:
-		response: bool = False
+		response = False
+		in_room: bool = False
 		user: Player = Player.get_by_email(user_email)
-		if user not in self.users:
+		for player in self.users:
+			if player.email == user_email:
+				in_room = True
+				break
+		if not in_room:
 			self.users.append(user)
 			response = True
-		return response
+		return in_room
 
 	def remove_user(self, user_email) -> bool:
 		response: bool = False
