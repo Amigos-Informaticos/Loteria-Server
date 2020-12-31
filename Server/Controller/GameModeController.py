@@ -49,16 +49,8 @@ class GameModeController:
 				response: dict = {}
 				counter: int = 0
 				for game_mode in game_modes:
-					patterns: dict = {}
-					pattern_counter = 0
-					for board in game_mode.get_boards():
-						patterns[pattern_counter] = {
-							str(pattern_counter): board.pattern
-						}
-						pattern_counter += 1
 					response[counter] = {
 						"name": game_mode.name,
-						"patterns": patterns
 					}
 					counter += 1
 				response = str(json.dumps(response))
