@@ -49,9 +49,7 @@ class GameModeController:
 				response: dict = {}
 				counter: int = 0
 				for game_mode in game_modes:
-					response[counter] = {
-						"name": game_mode.name,
-					}
+					response[counter] = game_mode.name
 					counter += 1
 				response = str(json.dumps(response))
 			else:
