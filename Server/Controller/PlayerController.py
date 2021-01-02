@@ -96,7 +96,8 @@ class PlayerController:
 				watchable_user: dict = {
 					"email": values["user_email"],
 					"connection:": connection["connection"],
-					"address": connection["address"]
+					"address": connection["address"],
+					"event": {}
 				}
 				watchable_user["event"][values["event"]] = True
 				PlayerController.connected_clients.append(watchable_user)
