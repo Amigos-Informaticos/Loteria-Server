@@ -146,22 +146,19 @@ class RoomController:
 		return response
 
 	def notify_joining_room(self, room: Room, message: str) -> None:
-		print(message)
 		for player in room.users:
-			print("A\t" + player.email)
 			for subscribed_user in PlayerController.connected_clients:
-				print("B\t" + subscribed_user["email"])
 				if player.email == subscribed_user["email"]:
 					subscribed_user["connection"].send(message.encode())
-					print(message)
 					break
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
+		print(id)
 		response_room: Room or None = None
 		for room in RoomController.rooms:
+			print(room.id)
 			if room.id == id:
-				print(room.id)
 				response_room = room
 				break
 		return response_room
