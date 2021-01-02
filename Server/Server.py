@@ -5,10 +5,11 @@ import threading
 from json import JSONDecodeError
 
 from Server.IServer import IServer
+from Server.ServerController import ServerController
 from Util.TelegramBot import TelegramBot
 
 
-class Server(IServer):
+class Server(IServer, ServerController):
 	def __init__(self, configuration: dict):
 		super().__init__()
 		self.logger: TelegramBot = TelegramBot("W3Log")
@@ -130,6 +131,7 @@ class Server(IServer):
 		while True:
 			try:
 				command: str = str(input())
-				print(command)
+				if command in self.methods:
+					getattr(self, command)()
 			except KeyboardInterrupt:
 				break
