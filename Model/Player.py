@@ -39,12 +39,10 @@ class Player(BaseModel):
 			response: str = "ALREADY REGISTERED"
 		return response
 
-	def login(self) -> bool:
-		exists = self.DB.query(
-			self.DB.query(Player).filter_by(
-				email=self.email, password=self.password).exists()
-		).scalar()
-		return exists
+	def login(self, email: str, password: str) -> bool:
+		user: Player = self.DB.query(Player).filter_by(
+			email=self.email, password=self.password).first()
+		return user.email == email and user.password == password
 
 	def delete(self) -> str:
 		if Player.is_registered(self.email):

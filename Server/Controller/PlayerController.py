@@ -35,7 +35,7 @@ class PlayerController:
 		if "email" in values and 'password' in values:
 			new_player: Player = Player.get_by_email(values['email'])
 			if Player.is_registered(values['email']):
-				if new_player.login():
+				if new_player.login(values["email"], values["password"]):
 					response = "OK"
 				else:
 					response = "WRONG PASSWORD"
