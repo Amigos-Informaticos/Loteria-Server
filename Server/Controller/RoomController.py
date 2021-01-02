@@ -64,7 +64,10 @@ class RoomController:
 			user: str = configuration["user_email"]
 			room: Room = RoomController.get_room_by_id(room_id)
 			if room is not None:
-				room.remove_user(user)
+				for connected_player in room.users:
+					if connected_player.email == user:
+						room.users.remove(connected_player)
+						break
 				if room.is_empty():
 					self.rooms.remove(room)
 					response = "OK"
