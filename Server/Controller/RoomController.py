@@ -145,6 +145,7 @@ class RoomController:
 			for subscribed_user in PlayerController.connected_clients:
 				if player.email == subscribed_user["email"]:
 					subscribed_user["connection"].send(message.encode())
+					print(player.email + " notified")
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:

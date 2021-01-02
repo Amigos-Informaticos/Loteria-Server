@@ -1,3 +1,4 @@
+import inspect
 import json
 from socket import socket
 from time import sleep
@@ -82,17 +83,13 @@ class PlayerController:
 			response = "WRONG ARGUMENTS"
 		return response
 
-	def notify_on_join_room(self, values: json, connection: dict) -> str:
+	def notify_me(self, values: json, connection: dict) -> str:
 		response: str = "ERROR"
-		arguments: set = {"user_email", "room_id"}
+		arguments: set = {"event", "user_email", "extra"}
 		if all(key in values for key in arguments):
 			watchable_user: dict = {
-				"email": values["user_email"],
-				"connection": connection["connection"],
-				"address": connection["address"]
+
 			}
-			PlayerController.watch_user(watchable_user)
-			response = "OK"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
@@ -177,3 +174,11 @@ class PlayerController:
 	@staticmethod
 	def get_code_from_email(email: str) -> str:
 		return md5(email)[0:5]
+
+	def is_event_supported(self, event: str) -> bool:
+		is_supported: bool = False
+		for method in inspect.getmembers(self, predicate=inspect.ismethod):
+			if method.__str__() == event:
+				is_supported = True
+				break
+		return is_supported
