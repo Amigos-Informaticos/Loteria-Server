@@ -60,14 +60,9 @@ class RoomController:
 	def exit_room(self, configuration: json, _) -> str:
 		response: str = "ERROR"
 		if "room_id" in configuration and "user_email" in configuration:
-			room_id: str = configuration["room_id"]
-			user: str = configuration["user_email"]
-			room: Room = RoomController.get_room_by_id(room_id)
+			room: Room = RoomController.get_room_by_id(configuration["room_id"])
 			if room is not None:
-				for connected_player in room.users:
-					if connected_player.email == user:
-						room.users.remove(connected_player)
-						break
+				room.remove_user(configuration["user_email"])
 				if room.is_empty():
 					self.rooms.remove(room)
 					response = "OK"
@@ -150,7 +145,6 @@ class RoomController:
 			for subscribed_user in PlayerController.connected_clients:
 				if player.email == subscribed_user["email"]:
 					subscribed_user["connection"].send(message.encode())
-					break
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
