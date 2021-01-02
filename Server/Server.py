@@ -106,7 +106,6 @@ class Server(IServer):
 					method = received["Method"]
 					arguments = received["Arguments"]
 			if method == "close":
-				self.unwatch_by_connection(connection)
 				connection.close()
 				self.connections.remove(connection)
 		except JSONDecodeError:
