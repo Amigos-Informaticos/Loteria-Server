@@ -62,6 +62,7 @@ class Server(IServer):
 		print(f"Listening on {self.port} with capacity for {self.capacity}")
 
 	def init_cycle(self) -> None:
+		threading.Thread(target=self.control)
 		while True:
 			try:
 				connection, address = self.tcp_socket.accept()
@@ -122,6 +123,14 @@ class Server(IServer):
 		print(f"Pinged from {connection_values['address']}")
 		return message['message']
 
-	def close_all(self):
+	def close_all(self) -> None:
 		for connection in self.connections:
 			connection.close()
+
+	def control(self) -> None:
+		while True:
+			try:
+				command: str = str(input())
+				print(command)
+			except KeyboardInterrupt:
+				break
