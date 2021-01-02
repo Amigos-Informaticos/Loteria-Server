@@ -65,6 +65,8 @@ class RoomController:
 				room.remove_user(configuration["user_email"])
 				if room.is_empty():
 					self.rooms.remove(room)
+					message: str = self.get_users_in_room(configuration, None)
+					self.notify_exit_room(room, message)
 					response = "OK"
 			else:
 				response = "ROOM NOT FOUND"
@@ -147,6 +149,13 @@ class RoomController:
 					if subscribed_user["event"]["join_room_notification"]:
 						subscribed_user["connection"].send(message.encode())
 						print(player.email + " notified")
+
+	def notify_exit_room(self, room: Room, message: str) -> None:
+		for player in room.users:
+			for subscribed_user in PlayerController.connected_clients:
+				if player.email == subscribed_user["email"]:
+					if subscribed_user["event"]["exit_room_notification"]:
+						subscribed_user["connection"].send(message.encode())
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
