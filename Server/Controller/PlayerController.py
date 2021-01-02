@@ -87,9 +87,19 @@ class PlayerController:
 		response: str = "ERROR"
 		arguments: set = {"event", "user_email", "extra"}
 		if all(key in values for key in arguments):
-			watchable_user: dict = {
-
-			}
+			subscribed: bool = False
+			for subscribed_client in PlayerController.connected_clients:
+				if subscribed_client["email"] == values["user_email"]:
+					subscribed_client["event"][values["event"]] = True
+					subscribed = True
+			if not subscribed:
+				watchable_user: dict = {
+					"email": values["user_email"],
+					"connection:": connection["connection"],
+					"address": connection["address"]
+				}
+				watchable_user["event"][values["event"]] = True
+				PlayerController.connected_clients.append(watchable_user)
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
