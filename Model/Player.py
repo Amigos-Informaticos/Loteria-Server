@@ -42,6 +42,8 @@ class Player(BaseModel):
 	def login(self, email: str, password: str) -> bool:
 		user: Player = self.DB.query(Player).filter_by(
 			email=self.email).first()
+		print(user.password)
+		print(password)
 		return user.email == email and user.password == password
 
 	def delete(self) -> str:
