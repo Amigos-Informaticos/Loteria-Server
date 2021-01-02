@@ -10,7 +10,7 @@ if __name__ == "__main__":
 	response = RoomController.make_room(
 		server,
 		{
-			"creator_email": "alexisao@hotmail.com",
+			"creator_email": "alexis@hotmail.com",
 			"rounds": "1",
 			"speed": "1",
 			"players": "4",
