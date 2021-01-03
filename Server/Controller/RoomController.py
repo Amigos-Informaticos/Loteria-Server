@@ -157,6 +157,13 @@ class RoomController:
 					if subscribed_user["event"]["exit_room_notification"]:
 						subscribed_user["connection"].send(message.encode())
 
+	def notify(self, room: Room, message: str, event: str) -> None:
+		for player in room.users:
+			for subscribed_user in PlayerController.connected_clients:
+				if player.email == subscribed_user["email"]:
+					if subscribed_user["event"][event]:
+						subscribed_user["connection"].send(message.encode())
+
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
 		print(id)
