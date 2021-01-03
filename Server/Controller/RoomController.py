@@ -63,11 +63,11 @@ class RoomController:
 			room: Room = RoomController.get_room_by_id(configuration["room_id"])
 			if room is not None:
 				room.remove_user(configuration["user_email"])
+				response = "OK"
 				if room.is_empty():
 					self.rooms.remove(room)
 					message: str = self.get_users_in_room(configuration, None)
 					self.notify_exit_room(room, message)
-					response = "OK"
 			else:
 				response = "ROOM NOT FOUND"
 		return response
