@@ -37,10 +37,11 @@ class Room:
 
 	def remove_user(self, user_email) -> bool:
 		response: bool = False
-		user: Player = Player.get_by_email(user_email)
-		if user in self.users:
-			self.users.remove(user)
-			response = True
+		for player in self.users:
+			if player.email == user_email:
+				self.users.remove(player)
+				response = True
+				break
 		return response
 
 	def send_message(self, values: json) -> None:
