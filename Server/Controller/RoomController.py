@@ -172,10 +172,8 @@ class RoomController:
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
-		print(id)
 		response_room: Room or None = None
 		for room in RoomController.rooms:
-			print(room.id)
 			if room.id == id:
 				response_room = room
 				break
