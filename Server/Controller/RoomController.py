@@ -150,9 +150,9 @@ class RoomController:
 		for player in room.users:
 			for subscribed_user in PlayerController.connected_clients:
 				if player.email == subscribed_user["email"]:
-					for event in subscribed_user["event"]:
-						print(event)
-					if subscribed_user["event"]["join_room_notification"]:
+					for subscription in subscribed_user["event"]:
+						print(subscription)
+					if subscribed_user["event"][event]:
 						subscribed_user["connection"].send(message.encode())
 						print(player.email + " notified")
 
