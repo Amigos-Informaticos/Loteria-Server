@@ -37,10 +37,14 @@ class RoomController:
 				room: Room = RoomController.get_room_by_id(configuration["room_id"])
 				if len(room.users) < room.users_limit:
 					if room.add_user(configuration["user_email"]):
+						if room.game_mode is not None:
+							game_mode = room.game_mode.name
+						else:
+							game_mode = "NOT FOUND"
 						response: dict = {
 							"speed": str(room.speed),
 							"rounds": str(room.rounds),
-							"game_mode": room.game_mode.name,
+							"game_mode": game_mode,
 							"game_mode_id": room.game_mode.idGameMode,
 							"available_spaces:": str(room.users_limit - len(room.users))
 						}
