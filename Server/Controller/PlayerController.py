@@ -95,7 +95,7 @@ class PlayerController:
 			if not subscribed:
 				watchable_user: dict = {
 					"email": values["user_email"],
-					"connection:": connection["connection"],
+					"connection": connection["connection"],
 					"address": connection["address"],
 					"event": {}
 				}
@@ -170,7 +170,6 @@ class PlayerController:
 	@staticmethod
 	def send(email: str, message: str) -> None:
 		sleep(5)
-
 		connection: socket = PlayerController.get_connection_by_email(email)
 		connection.send(message.encode())
 		PlayerController.unwatch_user(email)
