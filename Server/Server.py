@@ -91,6 +91,7 @@ class Server(IServer, ServerController):
 			arguments: json = received["Arguments"]
 
 			while method != "close":
+				print(method)
 				if method in self.methods:
 					connection_values: dict = {"connection": connection, "address": address}
 					response: str = getattr(self, method)(arguments, connection_values)
