@@ -102,6 +102,8 @@ class PlayerController:
 				watchable_user["event"][values["event"]] = True
 				PlayerController.connected_clients.append(watchable_user)
 				response = "OK"
+			else:
+				response = "ALREADY SUBSCRIBED"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
