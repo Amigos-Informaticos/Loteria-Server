@@ -100,7 +100,5 @@ class GameMode(BaseModel):
 
 	@staticmethod
 	def count_by_user(user_email: str) -> int:
-		count: int = 0
 		DB: Session = GameMode.init_connection()
-		count = DB.query(GameMode.idGameMode).filter_by(player=user_email).count()
-		return count
+		return DB.query(GameMode.idGameMode).filter_by(player=user_email).count()

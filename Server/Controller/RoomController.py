@@ -63,17 +63,24 @@ class RoomController:
 
 	def exit_room(self, configuration: json, _) -> str:
 		response: str = "ERROR"
-		if "room_id" in configuration and "user_email" in configuration:
+		arguments: set = {"room_id", "user_email"}
+		if all(key in configuration for key in arguments):
 			room: Room = RoomController.get_room_by_id(configuration["room_id"])
 			if room is not None:
-				room.remove_user(configuration["user_email"])
-				response = "OK"
-				if room.is_empty():
+				if room.creator.email == configuration["user_email"]:
+					room.empty_room()
 					self.rooms.remove(room)
-					message: str = self.get_users_in_room(configuration, None)
-					self.notify(room, message, "exit_room_notification")
+				else:
+					room.remove_user(configuration["user_email"])
+					if room.is_empty():
+						self.rooms.remove(room)
+				message: str = self.get_users_in_room(configuration, None)
+				self.notify(room, message, "exit_room_notification")
+				response = "OK"
 			else:
 				response = "ROOM NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
 		return response
 
 	def send_message(self, values: json, _) -> str:
@@ -81,7 +88,10 @@ class RoomController:
 		arguments: set = {"message", "sender", "room_id"}
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
-			room.send_message(values)
+			for player in room.users:
+				if player.email != values["sender"]:
+					message: str = json.dumps(values)
+					self.notify(room, message, "message_sent_notification")
 			response = "OK"
 		return response
 

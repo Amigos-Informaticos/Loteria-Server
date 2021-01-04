@@ -3,7 +3,6 @@ import random
 
 from Model.GameMode import GameMode
 from Model.Player import Player
-from Server.Controller.PlayerController import PlayerController
 from Util.Util import md5
 
 
@@ -44,14 +43,9 @@ class Room:
 				break
 		return response
 
-	def send_message(self, values: json) -> None:
-		arguments: set = {"sender", "message"}
-		if all(key in values for key in arguments):
-			values["room_id"] = self.id
-			for user in self.users:
-				if user.correoElectronico != values["sender"]:
-					values["receiver"] = user.correoElectronico
-					PlayerController.send_message(values)
+	def empty_room(self) -> None:
+		for player in self.users:
+			self.users.remove(player)
 
 	def is_empty(self) -> bool:
 		return len(self.users) == 0
