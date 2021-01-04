@@ -69,12 +69,13 @@ class RoomController:
 			if room is not None:
 				if room.creator.email == configuration["user_email"]:
 					room.empty_room()
+					message: str = self.get_users_in_room(configuration, None)
 					self.rooms.remove(room)
 				else:
 					room.remove_user(configuration["user_email"])
+					message: str = self.get_users_in_room(configuration, None)
 					if room.is_empty():
 						self.rooms.remove(room)
-				message: str = self.get_users_in_room(configuration, None)
 				self.notify(room, message, "exit_room_notification")
 				response = "OK"
 			else:
