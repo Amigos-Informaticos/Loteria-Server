@@ -127,27 +127,6 @@ class RoomController:
 			response = "WRONG ARGUMENTS"
 		return response
 
-	def set_user_ready(self, values: json, _) -> str:
-		response: str = "ERROR"
-		arguments: set = {"room_id", "user_email"}
-		if all(key in values for key in arguments):
-			if Player.is_registered(values["user_email"]):
-				if RoomController.get_room_by_id(values["room_id"]) is not None:
-					room: Room = RoomController.get_room_by_id(values["room_id"])
-					player: Player = room.get_player_by_email(values["user_email"])
-					if player is not None:
-						player.is_ready = True
-						response = "OK"
-					else:
-						response = "PLAYER NOT FOUND"
-				else:
-					response = "WRONG ID"
-			else:
-				response = "PLAYER NOT REGISTERED"
-		else:
-			response = "WRONG ARGUMENTS"
-		return response
-
 	def get_users_in_room(self, values: json, _) -> str:
 		response: str = "ERROR"
 		if "room_id" in values:
@@ -155,11 +134,9 @@ class RoomController:
 			response: dict = {}
 			counter: int = 0
 			for player in room.users:
-				is_ready: str = "T" if player.is_ready else "F"
 				response[str(counter)] = {
 					"nickname": player.nickname,
-					"email": player.email,
-					"is_ready": is_ready
+					"email": player.email
 				}
 				counter += 1
 			response = str(json.dumps(response))
