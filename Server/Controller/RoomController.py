@@ -107,6 +107,7 @@ class RoomController:
 					response[str(counter)] = message_struct
 					counter += 1
 				response = str(json.dumps(response))
+				player.clear_messages()
 			else:
 				response = "PLAYER NOT IN ROOM"
 		else:

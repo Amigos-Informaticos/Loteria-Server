@@ -55,7 +55,7 @@ class Player(BaseModel):
 	def queue_message(self, message: str, sender: str) -> None:
 		self.messages.append({"nickname": sender, "message": message})
 
-	def empty_messages_queue(self) -> None:
+	def clear_messages(self) -> None:
 		self.messages.clear()
 
 	@staticmethod

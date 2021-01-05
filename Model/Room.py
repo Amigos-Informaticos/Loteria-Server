@@ -38,7 +38,7 @@ class Room:
 		response: bool = False
 		for player in self.users:
 			if player.email == user_email:
-				player.empty_messages_queue()
+				player.clear_messages()
 				self.users.remove(player)
 				response = True
 				break
