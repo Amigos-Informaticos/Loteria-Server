@@ -44,7 +44,7 @@ class RoomController:
 							"speed": str(room.speed),
 							"rounds": str(room.rounds),
 							"game_mode": game_mode,
-							"game_mode_id": room.game_mode.idGameMode,
+							"game_mode_id": str(room.game_mode.idGameMode),
 							"available_spaces:": str(room.users_limit - len(room.users)),
 							"max_players": str(room.users_limit)
 						}
