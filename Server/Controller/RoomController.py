@@ -128,6 +128,8 @@ class RoomController:
 							break
 					if player_found:
 						response = "OK"
+						message: str = self.get_users_in_room(values, None)
+						self.notify(room, message, "join_room_notification")
 					else:
 						response = "PLAYER NOT IN ROOM"
 				else:
