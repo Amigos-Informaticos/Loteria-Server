@@ -80,13 +80,16 @@ class RoomController:
 
 	def send_message_to_room(self, values: json, _) -> str:
 		response: str = "ERROR"
-		arguments: set = {"message", "nickname", "room_id"}
+		arguments: set = {"message", "nickname", "room_id", "user_email"}
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
-			for player in room.users:
-				if player.nickname != values["nickname"]:
-					player.queue_message(values["message"])
-			response = "OK"
+			if room.get_player_by_email(values["user_email"]) is not None:
+				for player in room.users:
+					if player.nickname != values["nickname"]:
+						player.queue_message(values["message"], values["nickname"])
+				response = "OK"
+			else:
+				response = "PLAYER NOT IN ROOM"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
@@ -100,8 +103,8 @@ class RoomController:
 			if player is not None:
 				counter: int = 0
 				response: dict = {}
-				for message in player.messages:
-					response[str(counter)] = message
+				for message_struct in player.messages:
+					response[str(counter)] = message_struct
 					counter += 1
 				response = str(json.dumps(response))
 			else:

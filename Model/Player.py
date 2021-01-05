@@ -52,8 +52,8 @@ class Player(BaseModel):
 			deleted = True
 		return deleted
 
-	def queue_message(self, message: str) -> None:
-		self.messages.append(message)
+	def queue_message(self, message: str, sender: str) -> None:
+		self.messages.append({"nickname": sender, "message": message})
 
 	def empty_messages_queue(self) -> None:
 		self.messages.clear()
