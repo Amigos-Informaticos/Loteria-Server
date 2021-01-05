@@ -31,7 +31,8 @@ class PlayerController:
 
 	def login(self, values: json, _) -> str:
 		response: str = "ERROR"
-		if "email" in values and 'password' in values:
+		arguments: set = {"email", "password"}
+		if all(key in values for key in arguments):
 			new_player: Player = Player.get_by_email(values['email'])
 			if Player.is_registered(values['email']):
 				if new_player.login(values["email"], values["password"]):
@@ -49,6 +50,8 @@ class PlayerController:
 		if "email" in player:
 			PlayerController.unwatch_user(player["email"])
 			response = "OK"
+		else:
+			response = "WRONG ARGUMENTS"
 		return response
 
 	def delete_user(self, values: json, _) -> str:

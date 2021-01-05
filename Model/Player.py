@@ -45,14 +45,13 @@ class Player(BaseModel):
 			email=self.email).first()
 		return user.email == email and user.password == password
 
-	def delete(self) -> str:
+	def delete(self) -> bool:
+		deleted: bool = False
 		if Player.is_registered(self.email):
 			self.DB.delete(self)
 			self.DB.commit()
-			response: str = "OK"
-		else:
-			response: str = "ERROR"
-		return response
+			deleted = True
+		return deleted
 
 	def queue_message(self, message: str) -> None:
 		self.messages.append(message)
@@ -62,7 +61,7 @@ class Player(BaseModel):
 
 	@staticmethod
 	def get_by_email(email: str) -> Player or None:
-		new_player: None or Player = None
+		new_player: Player or None = None
 		if Player.is_registered(email):
 			player = Player.init_connection().query(Player).filter_by(
 				email=email).first()
@@ -73,6 +72,7 @@ class Player(BaseModel):
 				player.email,
 				player.password
 			)
+			print(new_player.email)
 		return new_player
 
 	@staticmethod
