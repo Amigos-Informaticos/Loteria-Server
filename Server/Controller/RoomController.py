@@ -78,7 +78,7 @@ class RoomController:
 			response = "WRONG ARGUMENTS"
 		return response
 
-	def send_message(self, values: json, _) -> str:
+	def send_message_to_room(self, values: json, _) -> str:
 		response: str = "ERROR"
 		arguments: set = {"message", "nickname", "room_id"}
 		if all(key in values for key in arguments):
