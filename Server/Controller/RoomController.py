@@ -87,6 +87,8 @@ class RoomController:
 				if player.nickname != values["nickname"]:
 					player.queue_message(values["message"])
 			response = "OK"
+		else:
+			response = "WRONG ARGUMENTS"
 		return response
 
 	def get_messages(self, values: json, _) -> str:
@@ -114,8 +116,8 @@ class RoomController:
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			if room is not None:
-				player: Player = Player.get_by_email(values["player_email"])
-				if player in room.users:
+				player: Player = room.get_player_by_email(values["player_email"])
+				if player is not None:
 					response = room.get_sorted_deck()
 				else:
 					response = "USER NOT IN ROOM"
@@ -132,16 +134,12 @@ class RoomController:
 			if Player.is_registered(values["user_email"]):
 				if RoomController.get_room_by_id(values["room_id"]) is not None:
 					room: Room = RoomController.get_room_by_id(values["room_id"])
-					player_found: bool = False
-					for player in room.users:
-						if player.email == values["user_email"]:
-							player.is_ready = True
-							player_found = True
-							break
-					if player_found:
+					player: Player = room.get_player_by_email(values["user_email"])
+					if player is not None:
+						player.is_ready = True
 						response = "OK"
 					else:
-						response = "PLAYER NOT IN ROOM"
+						response = "PLAYER NOT FOUND"
 				else:
 					response = "WRONG ID"
 			else:
