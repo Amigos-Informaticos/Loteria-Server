@@ -2,7 +2,6 @@ import json
 
 from Model.Player import Player
 from Model.Room import Room
-from Server.Controller.PlayerController import PlayerController
 
 
 class RoomController:
@@ -49,8 +48,6 @@ class RoomController:
 							"available_spaces:": str(room.users_limit - len(room.users))
 						}
 						response = str(json.dumps(response))
-						message: str = self.get_users_in_room(configuration, None)
-						self.notify(room, message, "join_room_notification")
 					else:
 						response = "ALREADY JOINED"
 				else:
@@ -69,14 +66,10 @@ class RoomController:
 			if room is not None:
 				if room.creator.email == configuration["user_email"]:
 					room.empty_room()
-					message: str = self.get_users_in_room(configuration, None)
-					self.rooms.remove(room)
 				else:
 					room.remove_user(configuration["user_email"])
-					message: str = self.get_users_in_room(configuration, None)
 					if room.is_empty():
 						self.rooms.remove(room)
-				self.notify(room, message, "exit_room_notification")
 				response = "OK"
 			else:
 				response = "ROOM NOT FOUND"
@@ -128,8 +121,6 @@ class RoomController:
 							break
 					if player_found:
 						response = "OK"
-						message: str = self.get_users_in_room(values, None)
-						self.notify(room, message, "join_room_notification")
 					else:
 						response = "PLAYER NOT IN ROOM"
 				else:
@@ -158,16 +149,6 @@ class RoomController:
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
-
-	def notify(self, room: Room, message: str, event: str) -> None:
-		for player in room.users:
-			for subscribed_user in PlayerController.connected_clients:
-				if player.email == subscribed_user["email"]:
-					for subscription in subscribed_user["event"]:
-						print(subscription)
-					if subscribed_user["event"][event]:
-						subscribed_user["connection"].send(message.encode())
-						print(player.email + " notified")
 
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
