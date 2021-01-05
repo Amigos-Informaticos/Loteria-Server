@@ -79,14 +79,32 @@ class RoomController:
 
 	def send_message(self, values: json, _) -> str:
 		response: str = "ERROR"
-		arguments: set = {"message", "sender", "room_id"}
+		arguments: set = {"message", "nickname", "room_id"}
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			for player in room.users:
-				if player.email != values["sender"]:
-					message: str = json.dumps(values)
-					self.notify(room, message, "message_sent_notification")
+				if player.nickname != values["nickname"]:
+					player.queue_message(values["message"])
 			response = "OK"
+		return response
+
+	def get_messages(self, values: json, _) -> str:
+		response: str = "ERROR"
+		arguments: set = {"user_email", "room_id"}
+		if all(key in values for key in arguments):
+			room: Room = RoomController.get_room_by_id(values["room_id"])
+			player: Player = room.get_player_by_email(values["user_email"])
+			if player is not None:
+				counter: int = 0
+				response: dict = {}
+				for message in player.messages:
+					response[str(counter)] = message
+					counter += 1
+				response = str(json.dumps(response))
+			else:
+				response = "PLAYER NOT IN ROOM"
+		else:
+			response = "WRONG ARGUMENTS"
 		return response
 
 	def get_sorted_deck(self, values: json, _) -> str:

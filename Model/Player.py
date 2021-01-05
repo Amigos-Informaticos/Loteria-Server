@@ -25,6 +25,7 @@ class Player(BaseModel):
 		self.password = password
 		self.score = 0
 		self.is_ready = False
+		self.messages: list = []
 		self.DB: Session = Player.init_connection()
 
 	def register(self) -> str:
@@ -52,6 +53,12 @@ class Player(BaseModel):
 		else:
 			response: str = "ERROR"
 		return response
+
+	def queue_message(self, message: str) -> None:
+		self.messages.append(message)
+
+	def empty_messages_queue(self) -> None:
+		self.messages.clear()
 
 	@staticmethod
 	def get_by_email(email: str) -> Player or None:

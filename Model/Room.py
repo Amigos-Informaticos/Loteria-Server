@@ -21,7 +21,7 @@ class Room:
 	def set_game_mode(self, game_mode_name: str, user_email: str) -> None:
 		self.game_mode: GameMode = GameMode.get_by_name_and_user(game_mode_name, user_email)
 
-	def add_user(self, user_email) -> bool:
+	def add_user(self, user_email: str) -> bool:
 		response: bool = False
 		in_room: bool = False
 		user: Player = Player.get_by_email(user_email)
@@ -34,10 +34,11 @@ class Room:
 			response = True
 		return response
 
-	def remove_user(self, user_email) -> bool:
+	def remove_user(self, user_email: str) -> bool:
 		response: bool = False
 		for player in self.users:
 			if player.email == user_email:
+				player.empty_messages_queue()
 				self.users.remove(player)
 				response = True
 				break
@@ -66,3 +67,11 @@ class Room:
 		if len(self.deck) == 0:
 			self.deck = [*range(1, 55)]
 		random.shuffle(self.deck)
+
+	def get_player_by_email(self, player_email: str) -> Player or None:
+		player_response: Player or None = None
+		for player in self.users:
+			if player.email == player_email:
+				player_response = player
+				break
+		return player_response
