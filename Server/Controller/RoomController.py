@@ -185,6 +185,22 @@ class RoomController:
 			response = "WRONG ARGUMENTS"
 		return response
 
+	def is_party_on(self, values: json, _) -> str:
+		response: str = "ERROR"
+		arguments: set = {"user_email", "room_id"}
+		if all(key in values for key in arguments):
+			room: Room = RoomController.get_room_by_id(values["room_id"])
+			if room is not None:
+				if room.get_player_by_email(values["user_email"]) is not None:
+					response = "ON" if room.is_on else "OFF"
+				else:
+					response = "PLAYER NOT IN ROOM"
+			else:
+				response = "ROOM NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
 	@staticmethod
 	def get_room_by_id(id: str) -> Room or None:
 		response_room: Room or None = None
