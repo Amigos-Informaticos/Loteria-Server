@@ -17,6 +17,7 @@ class Room:
 		self.set_game_mode(game_mode, self.creator.email)
 		self.users.append(self.creator)
 		self.id: str = md5(creator_email, 2)[0:5]
+		self.is_on = False
 
 	def set_game_mode(self, game_mode_name: str, user_email: str) -> None:
 		self.game_mode: GameMode = GameMode.get_by_name_and_user(game_mode_name, user_email)
