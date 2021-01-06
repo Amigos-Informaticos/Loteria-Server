@@ -59,6 +59,17 @@ class Player(BaseModel):
 	def clear_messages(self) -> None:
 		self.messages.clear()
 
+	def save(self) -> None:
+		self.DB.commit()
+
+	@staticmethod
+	def get_score_by_email(email: str) -> int or None:
+		score: int or None = None
+		if Player.is_registered(email):
+			score = Player.init_connection().query(Player.score).filter_by(
+				email=email).first()
+		return score
+
 	@staticmethod
 	def get_by_email(email: str) -> Player or None:
 		new_player: Optional[Player] = None

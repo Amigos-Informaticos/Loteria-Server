@@ -135,8 +135,8 @@ class RoomController:
 		response: str = "ERROR"
 		if "room_id" in values:
 			room: Room = RoomController.get_room_by_id(values["room_id"])
-			response: dict = {}
 			counter: int = 0
+			response: dict = {}
 			for player in room.users:
 				response[str(counter)] = {
 					"nickname": player.nickname,
@@ -144,6 +144,26 @@ class RoomController:
 				}
 				counter += 1
 			response = str(json.dumps(response))
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
+	def save_score(self, values: json, _) -> str:
+		response: str = "ERROR"
+		arguments: set = {"user_email", "score", "room_id"}
+		if all(key in values for key in arguments):
+			room: Room = RoomController.get_room_by_id(values["room_id"])
+			if room is not None:
+				player: Player = room.get_player_by_email(values["user_email"])
+				if player is not None:
+					player.score = values["score"]
+					player.score += Player.get_score_by_email(values["user_email"])
+					player.save()
+					response = "OK"
+				else:
+					response = "PLAYER NOT IN ROOM"
+			else:
+				response = "ROOM NOT FOUND"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response

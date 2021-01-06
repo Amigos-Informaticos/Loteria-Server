@@ -16,16 +16,16 @@ class TelegramBot:
 			values: dict = json.load(file)
 			if "url" in values:
 				self.url = values["url"]
+				self.complete_url = self.url + self.groupId + "&text="
 
 	def add_message(self, message: str) -> None:
 		self.messages.append(message + "\n")
 
 	def send(self, message: str = None) -> None:
-		complete_url = self.url + self.groupId + "&text="
-		if message is None:
+		if message is None and len(self.messages) > 0:
 			for single_message in self.messages:
-				complete_url = complete_url + single_message
-			self.messages: list = []
+				payload = self.complete_url + single_message
+			self.messages.clear()
 		else:
-			complete_url = complete_url + message
-		requests.get(complete_url)
+			payload = self.complete_url + message
+		requests.get(payload)
