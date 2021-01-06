@@ -2,7 +2,7 @@ import json
 from socket import socket
 from time import sleep
 
-from Model.Mailer import Mailer
+from Model.Mail import Mail
 from Model.Player import Player
 from Util.Util import remove_key, md5
 
@@ -89,7 +89,7 @@ class PlayerController:
 		response: str
 		if "email" in values:
 			code: str = PlayerController.get_code_from_email(values["email"])
-			mail: Mailer = Mailer()
+			mail: Mail = Mail()
 			mail.login_from_file()
 			response = mail.send(values["email"], code)
 		else:

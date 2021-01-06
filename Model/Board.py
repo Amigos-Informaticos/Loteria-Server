@@ -40,7 +40,7 @@ class Board(BaseModel):
 		return board
 
 	@staticmethod
-	def is_registered(pattern: str):
+	def is_registered(pattern: str) -> bool:
 		DB: Session = Board.init_connection()
 		is_registered: bool = DB.query(
 			DB.query(Board).filter_by(pattern=pattern).exists()

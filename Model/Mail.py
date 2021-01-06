@@ -4,7 +4,7 @@ from smtplib import SMTP, SMTPResponseException
 from ssl import SSLContext
 
 
-class Mailer:
+class Mail:
 	def __init__(self, port: int = 587, server: str = "smtp.gmail.com"):
 		self.port: int = port
 		self.server_address: str = server
@@ -15,7 +15,7 @@ class Mailer:
 		self.address = address
 		self.password = password
 
-	def login_from_file(self, file_path: str = "Configuration/mail_config.json"):
+	def login_from_file(self, file_path: str = "Configuration/mail_config.json") -> None:
 		with open(file_path) as json_file:
 			data = json.load(json_file)
 			self.address = data["address"]
