@@ -206,12 +206,12 @@ class RoomController:
 
 	def kick_player(self, values: json, _) -> str:
 		response: str = "ERROR"
-		arguments: set = {"user_email", "room_id", "kicked_email"}
+		arguments: set = {"user_email", "room_id", "kicked_nickname"}
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			if room is not None:
 				if room.get_player_by_email(values["user_email"]) is not None:
-					player_to_kick: Player = room.get_player_by_email(values["kicked_email"])
+					player_to_kick: Player = room.get_player_by_nickname(values["kicked_nickname"])
 					if player_to_kick is not None:
 						player_to_kick.kicked_counter += 1
 						response = "OK"

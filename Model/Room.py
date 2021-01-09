@@ -73,3 +73,10 @@ class Room:
 				player_response = player
 				break
 		return player_response
+
+	def get_player_by_nickname(self, nickname: str) -> Player or None:
+		player_response: Player or None = None
+		for player in self.users:
+			if player.nickname == nickname:
+				player_response = player
+		return player_response
