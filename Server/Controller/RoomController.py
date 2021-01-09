@@ -99,17 +99,20 @@ class RoomController:
 		arguments: set = {"user_email", "room_id"}
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
-			player: Player = room.get_player_by_email(values["user_email"])
-			if player is not None:
-				counter: int = 0
-				response: dict = {}
-				for message_struct in player.messages:
-					response[str(counter)] = message_struct
-					counter += 1
-				response = str(json.dumps(response))
-				player.clear_messages()
+			if room is not None:
+				player: Player = room.get_player_by_email(values["user_email"])
+				if player is not None:
+					counter: int = 0
+					response: dict = {}
+					for message_struct in player.messages:
+						response[str(counter)] = message_struct
+						counter += 1
+					response = str(json.dumps(response))
+					player.clear_messages()
+				else:
+					response = "PLAYER NOT IN ROOM"
 			else:
-				response = "PLAYER NOT IN ROOM"
+				response = "ROOM NOT FOUND"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
