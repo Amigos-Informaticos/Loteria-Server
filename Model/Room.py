@@ -58,9 +58,7 @@ class Room:
 		if len(self.deck) == 0:
 			self.sort_deck()
 		for i in range(54):
-			cards[str(i)] = {
-				"card": str(self.deck[i])
-			}
+			cards[str(i)] = str(self.deck[i])
 		response = str(json.dumps(cards))
 		return response
 
