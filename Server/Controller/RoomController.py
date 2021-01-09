@@ -69,8 +69,8 @@ class RoomController:
 					room.empty_room()
 				else:
 					room.remove_user(configuration["user_email"])
-					if room.is_empty():
-						self.rooms.remove(room)
+				if room.is_empty():
+					self.rooms.remove(room)
 				response = "OK"
 			else:
 				response = "ROOM NOT FOUND"
