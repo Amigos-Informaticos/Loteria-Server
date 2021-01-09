@@ -247,7 +247,7 @@ class RoomController:
 			response = "WRONG ARGUMENTS"
 		return response
 
-	@staticmethod
+	@staticmethodaada
 	def get_room_by_id(id: str) -> Room or None:
 		response_room: Room or None = None
 		for room in RoomController.rooms:
