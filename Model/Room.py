@@ -46,8 +46,7 @@ class Room:
 		return response
 
 	def empty_room(self) -> None:
-		for player in self.users:
-			self.users.remove(player)
+		self.users.clear()
 
 	def is_empty(self) -> bool:
 		return len(self.users) == 0
