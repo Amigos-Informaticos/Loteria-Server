@@ -19,7 +19,7 @@ class GameMode(BaseModel):
 		self.name = name
 		self.player = user_email
 		self.DB: Session = GameMode.init_connection()
-		if GameMode.is_registered(self.name, self.player):
+		if GameMode.is_registered(self.name):
 			auxiliary_game_mode: GameMode = self.DB.query(GameMode).filter_by(
 				name=self.name,
 				player=self.player).first()
@@ -28,7 +28,7 @@ class GameMode(BaseModel):
 
 	def save(self) -> str:
 		response: str = "ERROR"
-		if not GameMode.is_registered(self.name, self.player):
+		if not GameMode.is_registered(self.name):
 			self.DB.add(self)
 			self.DB.commit()
 			response = "OK"
@@ -38,7 +38,7 @@ class GameMode(BaseModel):
 
 	def delete(self) -> str:
 		response: str = "ERROR"
-		if GameMode.is_registered(self.name, self.player):
+		if GameMode.is_registered(self.name):
 			self.DB.delete(self)
 			self.DB.commit()
 			response = "OK"
@@ -48,7 +48,7 @@ class GameMode(BaseModel):
 
 	def save_pattern(self, pattern: str) -> str:
 		response: str = "ERROR"
-		if not GameMode.is_registered(self.name, self.player):
+		if not GameMode.is_registered(self.name):
 			self.save()
 		if GameMode.is_valid_pattern(pattern):
 			board: Board = Board(self.idGameMode)
@@ -65,10 +65,10 @@ class GameMode(BaseModel):
 		return boards
 
 	@staticmethod
-	def is_registered(name: str, user_email: str) -> bool:
+	def is_registered(name: str) -> bool:
 		DB: Session = GameMode.init_connection()
 		is_registered: bool = DB.query(
-			DB.query(GameMode).filter_by(name=name, player=user_email).exists()
+			DB.query(GameMode).filter_by(name=name).exists()
 		).scalar()
 		return is_registered
 
@@ -81,11 +81,12 @@ class GameMode(BaseModel):
 		return modes
 
 	@staticmethod
-	def get_by_name_and_user(name: str, user_email: str) -> GameMode or None:
+	def get_by_name(name: str) -> GameMode or None:
 		game_mode: GameMode or None = None
 		DB: Session = GameMode.init_connection()
-		if GameMode.is_registered(name, user_email):
-			game_mode = DB.query(GameMode).filter_by(name=name, player=user_email).first()
+		if GameMode.is_registered(name):
+			game_mode = DB.query(GameMode).filter_by(name=name).first()
+
 		return game_mode
 
 	@staticmethod

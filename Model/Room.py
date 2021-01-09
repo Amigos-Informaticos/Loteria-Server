@@ -14,13 +14,13 @@ class Room:
 		self.deck: list = []
 		self.speed = speed
 		self.rounds = rounds
-		self.set_game_mode(game_mode, self.creator.email)
+		self.set_game_mode(game_mode)
 		self.users.append(self.creator)
 		self.id: str = md5(creator_email, 2)[0:5]
 		self.has_started = False
 
-	def set_game_mode(self, game_mode_name: str, user_email: str) -> None:
-		self.game_mode: GameMode = GameMode.get_by_name_and_user(game_mode_name, user_email)
+	def set_game_mode(self, game_mode_name: str) -> None:
+		self.game_mode: GameMode = GameMode.get_by_name(game_mode_name)
 
 	def add_user(self, user_email: str) -> bool:
 		response: bool = False
