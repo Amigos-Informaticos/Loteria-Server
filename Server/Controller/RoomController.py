@@ -261,10 +261,9 @@ class RoomController:
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			if room is not None:
+				response = "PLAYER NOT IN ROOM"
 				if room.get_player_by_email(values["user_email"]) is not None:
 					response = "OK"
-				else:
-					response = "PLAYER NOT IN ROOM"
 			else:
 				response = "ROOM NOT FOUND"
 		else:
