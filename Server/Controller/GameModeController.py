@@ -8,21 +8,24 @@ class GameModeController:
 		response: str = "ERROR"
 		arguments: set = {"game_mode_name", "pattern", "user_email"}
 		if all(key in values for key in arguments):
-			game_mode: GameMode = GameMode(
-				values["game_mode_name"],
-				values["user_email"]
-			)
-			response = game_mode.save_pattern(values["pattern"])
+			if not GameMode.is_registered(values["game_mode_name"]):
+				game_mode: GameMode = GameMode(
+					values["game_mode_name"],
+					values["user_email"]
+				)
+				response = game_mode.save_pattern(values["pattern"])
+			else:
+				response = "ALREADY REGISTERED"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
 
 	def get_patterns(self, values: json, _) -> str:
 		response: str = "ERROR"
-		arguments: set = {"game_mode_name", "user_email"}
+		arguments: set = {"game_mode_name"}
 		if all(key in values for key in arguments):
-			if GameMode.is_registered(values["game_mode_name"], values["user_email"]):
-				game_mode: GameMode = GameMode.get_by_user(values["user_email"])
+			if GameMode.is_registered(values["game_mode_name"]):
+				game_mode: GameMode = GameMode.get_by_name(values["game_mode_name"])
 				boards: list or None = game_mode.get_boards()
 				if boards is not None:
 					patterns: dict = {}

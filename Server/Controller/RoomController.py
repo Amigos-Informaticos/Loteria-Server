@@ -234,6 +234,7 @@ class RoomController:
 				if room.get_player_by_email(values["user_email"]) is not None:
 					response: dict = {}
 					for player in room.users:
+						response[player.email] = "False"
 						if player.kicked_counter > (len(room.users) / 2):
 							response[player.email] = "True"
 						else:
