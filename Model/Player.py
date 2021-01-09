@@ -27,6 +27,7 @@ class Player(BaseModel):
 		self.score = 0
 		self.messages: list = []
 		self.kicked_counter: int = 0
+		self.kicked_by: list = []
 		self.DB: Session = Player.init_connection()
 
 	def register(self) -> str:

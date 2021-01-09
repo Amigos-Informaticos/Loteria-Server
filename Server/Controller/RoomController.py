@@ -213,11 +213,15 @@ class RoomController:
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			if room is not None:
-				if room.get_player_by_email(values["user_email"]) is not None:
+				kicking_player: Player = room.get_player_by_email(values["user_email"])
+				if kicking_player is not None:
 					player_to_kick: Player = room.get_player_by_nickname(values["kicked_nickname"])
 					if player_to_kick is not None:
-						player_to_kick.kicked_counter += 1
-						response = "OK"
+						if kicking_player not in player_to_kick.kicked_by:
+							player_to_kick.kicked_counter += 1
+							response = "OK"
+						else:
+							response = "ALREADY VOTED"
 					else:
 						response = "KICKED PLAYER NOT IN ROOM"
 				else:
