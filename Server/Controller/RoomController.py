@@ -135,15 +135,18 @@ class RoomController:
 		response: str = "ERROR"
 		if "room_id" in values:
 			room: Room = RoomController.get_room_by_id(values["room_id"])
-			counter: int = 0
-			response: dict = {}
-			for player in room.users:
-				response[str(counter)] = {
-					"nickname": player.nickname,
-					"email": player.email
-				}
-				counter += 1
-			response = str(json.dumps(response))
+			if room is not None:
+				counter: int = 0
+				response: dict = {}
+				for player in room.users:
+					response[str(counter)] = {
+						"nickname": player.nickname,
+						"email": player.email
+					}
+					counter += 1
+				response = str(json.dumps(response))
+			else:
+				response = "ROOM NOT FOUND"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
