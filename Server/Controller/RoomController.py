@@ -162,6 +162,7 @@ class RoomController:
 			if room is not None:
 				player: Player = room.get_player_by_email(values["user_email"])
 				if player is not None:
+					player.current_score = values["score"]
 					player.score = values["score"]
 					player.score += Player.get_score_by_email(values["user_email"])
 					player.save()
@@ -257,20 +258,42 @@ class RoomController:
 
 	def won_room(self, values: json, _) -> str:
 		response: str = "ERROR"
-		arguments: set = {"user_email", "room_id"}
+		arguments: set = {"user_email", "room_id", "score"}
 		if all(key in values for key in arguments):
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			if room is not None:
 				player: Player = room.get_player_by_email(values["user_email"])
 				if player is not None:
-					if len(room.winners) < room.current_round:
-						room.winners.append(player)
-						room.current_round += 1
+					if room.winner is None:
+						room.winner = player
+						player.score = Player.get_score_by_email(values["user_email"])
+						player.score += values["score"]
+						player.current_score = values["score"]
+						player.save()
 						response = "OK"
 					else:
 						response = "NOT WON"
 				else:
 					response = "PLAYER NOT IN ROOM"
+			else:
+				response = "ROOM NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
+	def there_is_a_winner(self, values: json, _) -> str:
+		response: str = "ERROR"
+		arguments: set = {"room_id"}
+		if all(key in values for key in arguments):
+			room: Room = RoomController.get_room_by_id(values["room_id"])
+			if room is not None:
+				if room.winner is None:
+					response = "NO WINNER"
+				else:
+					response: dict = {
+						"nickname": room.winner.nickname,
+						"score": room.winner.current_score
+					}
 			else:
 				response = "ROOM NOT FOUND"
 		else:
