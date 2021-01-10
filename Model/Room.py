@@ -14,6 +14,8 @@ class Room:
 		self.deck: list = []
 		self.speed = speed
 		self.rounds = rounds
+		self.current_round: int = 1
+		self.winners: list = []
 		self.set_game_mode(game_mode)
 		self.users.append(self.creator)
 		self.id: str = md5(creator_email, 2)[0:5]

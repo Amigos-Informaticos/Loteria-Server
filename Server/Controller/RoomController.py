@@ -255,6 +255,28 @@ class RoomController:
 			response = "WRONG ARGUMENTS"
 		return response
 
+	def won_room(self, values: json, _) -> str:
+		response: str = "ERROR"
+		arguments: set = {"user_email", "room_id"}
+		if all(key in values for key in arguments):
+			room: Room = RoomController.get_room_by_id(values["room_id"])
+			if room is not None:
+				player: Player = room.get_player_by_email(values["user_email"])
+				if player is not None:
+					if len(room.winners) < room.current_round:
+						room.winners.append(player)
+						room.current_round += 1
+						response = "OK"
+					else:
+						response = "NOT WON"
+				else:
+					response = "PLAYER NOT IN ROOM"
+			else:
+				response = "ROOM NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
 	def in_room(self, values: json, _) -> str:
 		response: str = "ERROR"
 		arguments: set = {"user_email", "room_id"}
