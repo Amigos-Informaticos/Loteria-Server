@@ -267,8 +267,8 @@ class RoomController:
 					if room.winner is None:
 						room.winner = player
 						player.score = Player.get_score_by_email(values["user_email"])
-						player.score += values["score"]
-						player.current_score = values["score"]
+						player.score += int(values["score"])
+						player.current_score = int(values["score"])
 						player.save()
 						response = "OK"
 					else:
