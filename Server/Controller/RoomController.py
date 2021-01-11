@@ -256,7 +256,7 @@ class RoomController:
 			response = "WRONG ARGUMENTS"
 		return response
 
-	def won_room(self, values: json, _) -> str:
+	def won_round(self, values: json, _) -> str:
 		response: str = "ERROR"
 		arguments: set = {"user_email", "room_id", "score"}
 		if all(key in values for key in arguments):
