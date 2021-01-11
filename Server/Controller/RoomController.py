@@ -290,11 +290,7 @@ class RoomController:
 				if room.winner is None:
 					response = "NO WINNER"
 				else:
-					response: dict = {
-						"nickname": room.winner.nickname,
-						"score": room.winner.current_score
-					}
-					response = json.dumps(response)
+					response: room.winner.nickname
 			else:
 				response = "ROOM NOT FOUND"
 		else:
