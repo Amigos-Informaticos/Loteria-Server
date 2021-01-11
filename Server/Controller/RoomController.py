@@ -192,6 +192,23 @@ class RoomController:
 			response = "WRONG ARGUMENTS"
 		return response
 
+	def stop_party(self, values: json, _) -> str:
+		response = "ERROR"
+		arguments: set = {"user_email", "room_id"}
+		if all(key in values for key in arguments):
+			room: Room = RoomController.get_room_by_id(values["room_id"])
+			if room is not None:
+				if room.creator.email == values["user_email"]:
+					room.has_started = False
+					response = "OK"
+				else:
+					response = "USER IS NOT CREATOR"
+			else:
+				response = "ROOM NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
 	def is_party_on(self, values: json, _) -> str:
 		response: str = "ERROR"
 		arguments: set = {"user_email", "room_id"}
