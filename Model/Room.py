@@ -1,5 +1,6 @@
 import json
 import random
+from random import randint
 
 from Model.GameMode import GameMode
 from Model.Player import Player
@@ -17,7 +18,7 @@ class Room:
 		self.winner: Player = None
 		self.set_game_mode(game_mode)
 		self.users.append(self.creator)
-		self.id: str = md5(creator_email, 2)[0:5]
+		self.id: str = md5(str(randint(0, 99)), 2)[0:5]
 		self.has_started = False
 
 	def set_game_mode(self, game_mode_name: str) -> None:
