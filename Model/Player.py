@@ -69,8 +69,9 @@ class Player(BaseModel):
 	def get_score_by_email(email: str) -> int or None:
 		score: int or None = None
 		if Player.is_registered(email):
-			score = Player.init_connection().query(Player.score).filter_by(
+			player = Player.init_connection().query(Player).filter_by(
 				email=email).first()
+			score = player.score
 		return score
 
 	@staticmethod
