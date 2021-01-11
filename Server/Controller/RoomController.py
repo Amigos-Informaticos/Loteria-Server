@@ -294,6 +294,7 @@ class RoomController:
 						"nickname": room.winner.nickname,
 						"score": room.winner.current_score
 					}
+					response = json.dumps(response)
 			else:
 				response = "ROOM NOT FOUND"
 		else:
