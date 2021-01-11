@@ -65,10 +65,7 @@ class RoomController:
 		if all(key in configuration for key in arguments):
 			room: Room = RoomController.get_room_by_id(configuration["room_id"])
 			if room is not None:
-				if room.creator.email == configuration["user_email"]:
-					room.empty_room()
-				else:
-					room.remove_user(configuration["user_email"])
+				room.remove_user(configuration["user_email"])
 				if room.is_empty():
 					self.rooms.remove(room)
 				response = "OK"
