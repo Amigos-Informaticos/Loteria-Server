@@ -3,7 +3,6 @@ from typing import Optional
 
 from sqlalchemy import Column, String, SmallInteger
 from sqlalchemy.orm import Session
-from sqlalchemy.orm.attributes import flag_modified
 
 from Model import Player
 from Model.BaseModel import BaseModel
@@ -64,7 +63,7 @@ class Player(BaseModel):
 		self.messages.clear()
 
 	def save(self) -> None:
-		flag_modified(self, "score")
+		self.DB.add(self)
 		self.DB.commit()
 
 	@staticmethod
