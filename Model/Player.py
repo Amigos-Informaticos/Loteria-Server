@@ -62,13 +62,15 @@ class Player(BaseModel):
 	def clear_messages(self) -> None:
 		self.messages.clear()
 
-	def add_score(self, score: int) -> None:
-		self.score = Player.get_score_by_email(self.email)
-		self.score += score
-		self.DB.commit()
-
 	def save(self) -> None:
 		self.DB.commit()
+
+	@staticmethod
+	def add_score(score: int, user_email: str) -> None:
+		DB: Session = Player.init_connection()
+		player = DB.query(Player).filter_by(email=user_email).first()
+		player.score += score
+		DB.commit()
 
 	@staticmethod
 	def get_score_by_email(email: str) -> int:
