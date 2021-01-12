@@ -157,6 +157,7 @@ class RoomController:
 		if all(key in values for key in arguments):
 			player: Player = Player.get_by_email(values["user_email"])
 			if player is not None:
+				player.score = Player.get_score_by_email(values["score"])
 				player.score += int(values["score"])
 				player.save()
 				response = "OK"
