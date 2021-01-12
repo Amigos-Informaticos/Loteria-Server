@@ -112,7 +112,7 @@ class Player(BaseModel):
 		counter: int = 0
 		players: dict = {}
 		results: list = DB.query(Player.nickname, Player.score).order_by(
-			Player.score.asc()).limit(10)
+			Player.score.desc()).limit(10)
 		for player in results:
 			values: dict = {
 				"name": player.nickname,

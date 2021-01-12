@@ -15,7 +15,7 @@ class Room:
 		self.deck: list = []
 		self.speed = speed
 		self.rounds = rounds
-		self.winner: Player = None
+		self.winner: Player or None = None
 		self.set_game_mode(game_mode)
 		self.users.append(self.creator)
 		self.id: str = md5(str(randint(0, 99)), 2)[0:5]
