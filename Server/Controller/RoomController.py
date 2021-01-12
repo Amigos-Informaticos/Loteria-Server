@@ -158,8 +158,11 @@ class RoomController:
 			room: Room = RoomController.get_room_by_id(values["room_id"])
 			if room is not None:
 				if room.creator.email == values["user_email"]:
-					room.has_started = True
-					response = "OK"
+					if len(room.users) > 1:
+						room.has_started = True
+						response = "OK"
+					else:
+						response = "NOT ENOUGH PLAYERS"
 				else:
 					response = "PLAYER IS NOT CREATOR"
 			else:
