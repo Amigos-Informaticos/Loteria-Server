@@ -64,7 +64,7 @@ class Player(BaseModel):
 		self.messages.clear()
 
 	def save(self) -> None:
-		flag_modified(self, self.email)
+		flag_modified(self, "score")
 		self.DB.commit()
 
 	@staticmethod
