@@ -91,11 +91,7 @@ class PlayerController:
 		if all(key in values for key in arguments):
 			player: Player = Player.get_by_email(values["user_email"])
 			if player is not None:
-				print(player.score)
-				player.score = Player.get_score_by_email(values["user_email"])
-				player.score = player.score + int(values["score"])
-				print(player.score)
-				player.save()
+				player.add_score(int(values["score"]))
 				response = "OK"
 			else:
 				response = "PLAYER NOT FOUND"
