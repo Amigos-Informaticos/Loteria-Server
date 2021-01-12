@@ -72,6 +72,8 @@ class Player(BaseModel):
 			player = Player.init_connection().query(Player).filter_by(
 				email=email).first()
 			score = player.score
+			if score is None:
+				score = 0
 		return score
 
 	@staticmethod
