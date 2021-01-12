@@ -24,7 +24,7 @@ class Player(BaseModel):
 		self.nickname = nickname
 		self.email = email
 		self.password = password
-		self.score: int = 0
+		self.score = 0
 		self.current_score: int = 0
 		self.messages: list = []
 		self.kicked_counter: int = 0
