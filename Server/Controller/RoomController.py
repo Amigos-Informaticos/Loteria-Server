@@ -153,21 +153,15 @@ class RoomController:
 
 	def save_score(self, values: json, _) -> str:
 		response: str = "ERROR"
-		arguments: set = {"user_email", "score", "room_id"}
+		arguments: set = {"user_email", "score"}
 		if all(key in values for key in arguments):
-			room: Room = RoomController.get_room_by_id(values["room_id"])
-			if room is not None:
-				player: Player = room.get_player_by_email(values["user_email"])
-				if player is not None:
-					player.current_score = values["score"]
-					player.score = values["score"]
-					player.score += Player.get_score_by_email(values["user_email"])
-					player.save()
-					response = "OK"
-				else:
-					response = "PLAYER NOT IN ROOM"
+			player: Player = Player.get_by_email(values["user_email"])
+			if player is not None:
+				player.score += int(values["score"])
+				player.save()
+				response = "OK"
 			else:
-				response = "ROOM NOT FOUND"
+				response = "PLAYER NOT FOUND"
 		else:
 			response = "WRONG ARGUMENTS"
 		return response

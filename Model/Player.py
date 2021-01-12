@@ -87,7 +87,6 @@ class Player(BaseModel):
 				player.email,
 				player.password
 			)
-			print(new_player.email)
 		return new_player
 
 	@staticmethod
