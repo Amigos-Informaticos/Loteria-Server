@@ -16,7 +16,6 @@ class RoomController:
 					values["creator_email"],
 					int(values["players"]),
 					int(values["speed"]),
-					int(values["rounds"]),
 					values["game_mode"]
 				)
 				room.users_limit = int(values["players"])

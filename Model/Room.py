@@ -8,13 +8,12 @@ from Util.Util import md5
 
 
 class Room:
-	def __init__(self, creator_email: str, limit: int, speed: int, rounds: int, game_mode: str):
+	def __init__(self, creator_email: str, limit: int, speed: int, game_mode: str):
 		self.creator: Player = Player.get_by_email(creator_email)
 		self.users: list = []
 		self.users_limit = limit
 		self.deck: list = []
 		self.speed = speed
-		self.rounds = rounds
 		self.winner: Player or None = None
 		self.set_game_mode(game_mode)
 		self.users.append(self.creator)
