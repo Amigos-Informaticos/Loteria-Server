@@ -93,6 +93,7 @@ class PlayerController:
 			if player is not None:
 				player.score = Player.get_score_by_email(values["user_email"])
 				player.score += int(values["score"])
+				print(values["score"])
 				player.save()
 				response = "OK"
 			else:

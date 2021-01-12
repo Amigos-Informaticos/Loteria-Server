@@ -63,7 +63,6 @@ class Player(BaseModel):
 		self.messages.clear()
 
 	def save(self) -> None:
-		self.DB.flush()
 		self.DB.commit()
 
 	@staticmethod
