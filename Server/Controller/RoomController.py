@@ -9,7 +9,7 @@ class RoomController:
 
 	def make_room(self, values: json, _) -> str:
 		response: str = "ERROR"
-		arguments: set = {"creator_email", "rounds", "speed", "players", "game_mode"}
+		arguments: set = {"creator_email", "speed", "players", "game_mode"}
 		if all(key in arguments for key in values):
 			if not RoomController.exists_by_creator(values["creator_email"]):
 				room: Room = Room(
