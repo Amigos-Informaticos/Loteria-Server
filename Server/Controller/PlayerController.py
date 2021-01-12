@@ -85,6 +85,22 @@ class PlayerController:
 			response = "WRONG ARGUMENTS"
 		return response
 
+	def save_score(self, values: json, _) -> str:
+		response: str = "ERROR"
+		arguments: set = {"user_email", "score"}
+		if all(key in values for key in arguments):
+			player: Player = Player.get_by_email(values["user_email"])
+			if player is not None:
+				player.score = Player.get_score_by_email(values["score"])
+				player.score += int(values["score"])
+				player.save()
+				response = "OK"
+			else:
+				response = "PLAYER NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
 	def send_code_to_email(self, values: json, _) -> str:
 		response: str
 		if "email" in values:
