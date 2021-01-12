@@ -11,18 +11,15 @@ class RoomController:
 		response: str = "ERROR"
 		arguments: set = {"creator_email", "speed", "players", "game_mode"}
 		if all(key in arguments for key in values):
-			if not RoomController.exists_by_creator(values["creator_email"]):
-				room: Room = Room(
-					values["creator_email"],
-					int(values["players"]),
-					int(values["speed"]),
-					values["game_mode"]
-				)
-				room.users_limit = int(values["players"])
-				RoomController.rooms.append(room)
-				response = room.id
-			else:
-				response = "ROOM ALREADY EXISTS"
+			room: Room = Room(
+				values["creator_email"],
+				int(values["players"]),
+				int(values["speed"]),
+				values["game_mode"]
+			)
+			room.users_limit = int(values["players"])
+			RoomController.rooms.append(room)
+			response = room.id
 		else:
 			response = "WRONG ARGUMENTS"
 		return response
@@ -314,12 +311,3 @@ class RoomController:
 				response_room = room
 				break
 		return response_room
-
-	@staticmethod
-	def exists_by_creator(user_email: str) -> bool:
-		exists: bool = False
-		for room in RoomController.rooms:
-			if room.creator.email == user_email:
-				exists = True
-				break
-		return exists
