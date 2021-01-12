@@ -66,7 +66,7 @@ class Player(BaseModel):
 		self.DB.commit()
 
 	@staticmethod
-	def get_score_by_email(email: str) -> int or None:
+	def get_score_by_email(email: str) -> int:
 		score: int or None = None
 		if Player.is_registered(email):
 			player = Player.init_connection().query(Player).filter_by(
