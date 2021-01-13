@@ -66,15 +66,11 @@ class Player(BaseModel):
 		self.DB.commit()
 
 	@staticmethod
-	def change_password(user_email: str, old_password: str, new_password: str) -> bool:
-		response: bool = False
+	def change_password(user_email: str, new_password: str) -> None:
 		DB: Session = Player.init_connection()
-		player: Player = DB.query(Player).filter_by(email=user_email).first()
-		if player.password == old_password:
-			player.password = new_password
-			DB.commit()
-			response = True
-		return response
+		player = DB.query(Player).filter_by(email=user_email).first()
+		player.password = new_password
+		DB.commit()
 
 	@staticmethod
 	def add_score(score: int, user_email: str) -> None:
