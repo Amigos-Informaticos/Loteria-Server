@@ -99,6 +99,22 @@ class PlayerController:
 			response = "WRONG ARGUMENTS"
 		return response
 
+	def change_password(self, values: json, _) -> str:
+		response: str = "ERROR"
+		arguments: set = {"user_email", "old_password", "new_password"}
+		if all(key in values for key in arguments):
+			if Player.is_registered(values["user_email"]):
+				Player.change_password(
+					values["user_email"],
+					values["old_password"],
+					values["new_password"])
+				response = "OK"
+			else:
+				response = "PLAYER NOT FOUND"
+		else:
+			response = "WRONG ARGUMENTS"
+		return response
+
 	def send_code_to_email(self, values: json, _) -> str:
 		response: str
 		if "email" in values:
