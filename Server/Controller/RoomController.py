@@ -210,10 +210,13 @@ class RoomController:
 					player_to_kick: Player = room.get_player_by_nickname(values["kicked_nickname"])
 					if player_to_kick is not None:
 						if kicking_player not in player_to_kick.kicked_by:
+							player_to_kick.kicked_by.append(kicking_player)
 							player_to_kick.kicked_counter += 1
 							response = "OK"
 						else:
 							response = "ALREADY VOTED"
+						if player_to_kick.kicked_counter >= len(room.users) / 2:
+							room.users.remove(player_to_kick)
 					else:
 						response = "KICKED PLAYER NOT IN ROOM"
 				else:
