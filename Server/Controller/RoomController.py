@@ -209,7 +209,9 @@ class RoomController:
 				if kicking_player is not None:
 					player_to_kick: Player = room.get_player_by_nickname(values["kicked_nickname"])
 					if player_to_kick is not None:
-						if kicking_player not in player_to_kick.kicked_by:
+						if kicking_player not in player_to_kick.kicked_by \
+								and kicking_player.email != player_to_kick.email \
+								and room.get_player_by_email(kicking_player.email) is not None:
 							player_to_kick.kicked_by.append(kicking_player)
 							player_to_kick.kicked_counter += 1
 							response = "OK"
