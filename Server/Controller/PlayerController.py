@@ -105,7 +105,7 @@ class PlayerController:
 		if all(key in values for key in arguments):
 			if Player.is_registered(values["user_email"]):
 				player: Player = Player.get_by_email(values["user_email"])
-				if player.password == values["old_password"]:
+				if player.password == values["old_password"][0:31]:
 					Player.change_password(
 						values["user_email"],
 						values["new_password"])
